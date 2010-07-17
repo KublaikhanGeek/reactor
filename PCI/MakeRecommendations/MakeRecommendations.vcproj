@@ -191,10 +191,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\RecommendMovie.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\Score.h"
 				>
 			</File>
