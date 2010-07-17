@@ -6,6 +6,7 @@
 	ProjectGUID="{0A622FEB-DE7F-4410-A6D0-6C80BA98A74A}"
 	RootNamespace="MakeRecommendations"
 	Keyword="Win32Proj"
+	AssemblyReferenceSearchPaths="&quot;..\src&quot;"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -41,6 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="E:\Projects\PCI\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -188,6 +190,10 @@
 			</File>
 			<File
 				RelativePath="..\src\RecommendData.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RecommendMovie.h"
 				>
 			</File>
 			<File

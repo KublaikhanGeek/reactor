@@ -2,6 +2,7 @@
 #define __XIAO5GE_MATH_UTILITY_H__
 
 #include <cmath>
+#include <set>
 #include <algorithm>
 
 #define MATH_UTILITY_CHECK_DISTANCE(begin1, end1, begin2, end2) \
@@ -204,28 +205,20 @@ double GetTanimotoCoefficient(
 	const ForwardIterator & secondBegin,
 	const ForwardIterator & secondEnd)
 {
-	typedef typename ForwardIterator::value_type T;
-	size_t dist1 = std::distance(firstBegin, firstEnd);
-	size_t dist2 = std::distance(secondBegin, secondEnd);
-	size_t maxSize = std::min(dist1, dist2);
-	T * interSet = new T[maxSize];
+	typename std::set<T> set(firstBegin, firstEnd);
 	size_t setSize = 0;
-	ForwardIterator iter1 = firstBegin;
-	ForwardIterator iter2 = secondBegin;
-
-	for (size_t fIdx = 0;  fIdx < dist1; ++ fIdx)
+	const ForwardIterator iter = secondBegin;
+	while (iter != secondEnd)
 	{
-		for (size_t sIdx = 0; sIdx < dist2; ++ sIdx)
+		if (set.find(*iter) != set.end())
 		{
-			if (*iter1 == *iter2)
-			{
-				interSet[setSize ++] = *iter1;
-				++ iter2;
-			}
+			++ setSize;
 		}
-		++ iter1;
+		++ iter;
 	}
 
+	size_t dist1 = std::distance(firstBegin, firstEnd);
+	size_t dist2 = std::distance(secondBegin, secondEnd);
 	return (setSize + 0.0) / (dist1 + dist2 - setSize);
 }
 
@@ -236,27 +229,20 @@ double GetTanimotoCoefficient(
 	const T * secondBegin,
 	const T * secondEnd)
 {
-	size_t dist1 = std::distance(firstBegin, firstEnd);
-	size_t dist2 = std::distance(secondBegin, secondEnd);
-	size_t maxSize = std::min(dist1, dist2);
-	T * interSet = new T[maxSize];
+	typename std::set<T> set(firstBegin, firstEnd);
 	size_t setSize = 0;
-	const T * iter1 = firstBegin;
-	const T * iter2 = secondBegin;
-
-	for (size_t fIdx = 0;  fIdx < dist1; ++ fIdx)
+	const T * iter = secondBegin;
+	while (iter != secondEnd)
 	{
-		for (size_t sIdx = 0; sIdx < dist2; ++ sIdx)
+		if (set.find(*iter) != set.end())
 		{
-			if (*iter1 == *iter2)
-			{
-				interSet[setSize ++] = *iter1;
-				++ iter2;
-			}
+			++ setSize;
 		}
-		++ iter1;
+		++ iter;
 	}
 
+	size_t dist1 = std::distance(firstBegin, firstEnd);
+	size_t dist2 = std::distance(secondBegin, secondEnd);
 	return (setSize + 0.0) / (dist1 + dist2 - setSize);
 }
 
