@@ -207,7 +207,7 @@ double GetTanimotoCoefficient(
 {
 	typename std::set<T> set(firstBegin, firstEnd);
 	size_t setSize = 0;
-	const ForwardIterator iter = secondBegin;
+	ForwardIterator iter = secondBegin;
 	while (iter != secondEnd)
 	{
 		if (set.find(*iter) != set.end())
@@ -244,6 +244,68 @@ double GetTanimotoCoefficient(
 	size_t dist1 = std::distance(firstBegin, firstEnd);
 	size_t dist2 = std::distance(secondBegin, secondEnd);
 	return (setSize + 0.0) / (dist1 + dist2 - setSize);
+}
+
+template <typename ForwardIterator>
+double GetCosineAngle(
+	const ForwardIterator & firstBegin,
+	const ForwardIterator & firstEnd,
+	const ForwardIterator & secondBegin,
+	const ForwardIterator & secondEnd)
+{
+	MATH_UTILITY_CHECK_DISTANCE(firstBegin, firstEnd, secondBegin, secondEnd);
+	
+	ForwardIterator iter1 = firstBegin;
+	ForwardIteraotr iter2 = secondBegin;
+	double res1 = 0.0; // ab
+	double res2 = 0.0; // |a|
+	double res3 = 0.0; // |b|
+	while (iter1 != firstEnd)
+	{
+		res1 += (*iter1) * (*iter2);
+		res2 += (*iter1) * (*iter1);
+		res3 += (*iter2) * (*iter2);
+		++ iter1;
+		++ iter2;
+	}
+	double res4 = sqrt(res2 * res3);
+
+	if (res4 == 0.0)
+	{
+		return 1.0;
+	}
+	return res1 / res4;
+}
+
+template <typename T>
+double GetCosineAngle(
+	const T * firstBegin,
+	const T * firstEnd,
+	const T * secondBegin,
+	const T * secondEnd)
+{
+	MATH_UTILITY_CHECK_DISTANCE(firstBegin, firstEnd, secondBegin, secondEnd);
+	
+	const T * iter1 = firstBegin;
+	const T * iter2 = secondBegin;
+	double res1 = 0.0; // ab
+	double res2 = 0.0; // |a|
+	double res3 = 0.0; // |b|
+	while (iter1 != firstEnd)
+	{
+		res1 += (*iter1) * (*iter2);
+		res2 += (*iter1) * (*iter1);
+		res3 += (*iter2) * (*iter2);
+		++ iter1;
+		++ iter2;
+	}
+	double res4 = sqrt(res2 * res3);
+
+	if (res4 == 0.0)
+	{
+		return 1.0;
+	}
+	return res1 / res4;
 }
 
 #endif //__XIAO5GE_MATH_UTILITY_H__

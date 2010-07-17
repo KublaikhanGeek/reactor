@@ -117,6 +117,16 @@ int main(int argc, char ** argv)
 			<< g_mapMovieInfo[pRecItems[nIdx]].GetTitle() << endl;
 	}
 
+	///cosine
+	GetRecommendation(const_cast<const double **>(g_szRatings), unMaxUserNum, 
+		unMaxMovieNum, nPersonIndex, GetCosineScore, nRecNum, pRecItems, pRecScores);
+	cout << "\n---------------------Cosine Recommendation: \n";
+	for (int nIdx = 0; nIdx < nRecNum; ++ nIdx)
+	{
+		cout << nIdx << "\t" << pRecScores[nIdx] << "\t" 
+			<< g_mapMovieInfo[pRecItems[nIdx]].GetTitle() << endl;
+	}
+
 	///deallocate memory
 	for (size_t unIdx = 0; unIdx < unMaxUserNum; ++ unIdx)
 	{

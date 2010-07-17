@@ -35,6 +35,11 @@ double GetTanimotoScore(double coef)
 	return coef;
 }
 
+double GetCosineScore(double cos)
+{
+	return cos;
+}
+
 double GetEuclideanScore(const double * myCritics, const double * hisCritics, size_t size)
 {
 	double dist = GetEuclideanDistance(myCritics, myCritics + size,
@@ -57,6 +62,14 @@ double GetTanimotoScore(const double * myCritics, const double * hisCritics, siz
 		hisCritics, hisCritics + size);
 
 	return GetTanimotoScore(coef);
+}
+
+double GetCosineScore(const double * myCritics, const double * hisCritics, size_t size)
+{
+	double cos = GetCosineAngle(myCritics, myCritics + size, 
+		hisCritics, hisCritics + size);
+
+	return GetCosineScore(cos);
 }
 
 typedef double (*ScoreFunc)(const double *, const double *, size_t);
