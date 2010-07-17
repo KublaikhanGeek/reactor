@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeRecommendations", "MakeRecommendations\MakeRecommendations.vcproj", "{0A622FEB-DE7F-4410-A6D0-6C80BA98A74A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DiscoveringGroups", "DiscoveringGroups\DiscoveringGroups.vcproj", "{888D4DF8-13A1-44F4-B322-0F26B145D17C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0A622FEB-DE7F-4410-A6D0-6C80BA98A74A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0A622FEB-DE7F-4410-A6D0-6C80BA98A74A}.Debug|Win32.Build.0 = Debug|Win32
+		{0A622FEB-DE7F-4410-A6D0-6C80BA98A74A}.Release|Win32.ActiveCfg = Release|Win32
+		{0A622FEB-DE7F-4410-A6D0-6C80BA98A74A}.Release|Win32.Build.0 = Release|Win32
+		{888D4DF8-13A1-44F4-B322-0F26B145D17C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{888D4DF8-13A1-44F4-B322-0F26B145D17C}.Debug|Win32.Build.0 = Debug|Win32
+		{888D4DF8-13A1-44F4-B322-0F26B145D17C}.Release|Win32.ActiveCfg = Release|Win32
+		{888D4DF8-13A1-44F4-B322-0F26B145D17C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
