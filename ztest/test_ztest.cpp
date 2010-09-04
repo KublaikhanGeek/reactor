@@ -2,7 +2,7 @@
 #include "ztest.h"
 
 //if you want to used ztest, just follow 4 steps described below,
-//have fun with is :)
+//have fun with it :)
 
 //step 1: Declare the test class and the test cases
 Z_BEGIN_TEST_CLASS(Test)
