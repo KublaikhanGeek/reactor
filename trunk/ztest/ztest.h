@@ -89,7 +89,7 @@
 	public:                                                         \
 		void TestCase##a##b()                                       \
 		{                                                           \
-			fprintf(stderr, "Running test: %s/%s\n", #a, #b);       \
+			fprintf(stderr, "Running test case: %s %s\n", #a, #b);  \
 			Run##a##b();                                            \
 		}                                                           \
 	private:                                                        \
