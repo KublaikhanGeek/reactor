@@ -9,15 +9,16 @@
  * @version 1.0.0
  */
 
+#include <stdexcept>
+
 //expect a condition to be true
-#define Z_EXPECT_TRUE(cond)                                \
-	do                                                     \
-	{                                                      \
-		if (!(cond))                                       \
-		{                                                  \
-			fprintf(stderr, " [Check failed] %s\n", #cond);\
-			exit(1);                                       \
-		}                                                  \
+#define Z_EXPECT_TRUE(cond)                                  \
+	do                                                       \
+	{                                                        \
+		if (!(cond))                                         \
+		{                                                    \
+			throw std::runtime_error("[Check failed] "#cond);\
+		}                                                    \
 	} while (0);
 //expect a condition to be false
 #define Z_EXPECT_FALSE(cond)   Z_EXPECT_TRUE(!(cond))
@@ -28,8 +29,7 @@
 	{                                                                        \
 		if (!((val1) op (val2)))                                             \
 		{                                                                    \
-			fprintf(stderr, " [Check failed] %s %s %s\n", #val1, #op, #val2);\
-			exit(1);                                                         \
+			throw std::runtime_error("[Check failed] "#val1" "#op" "#val2);  \
 		}                                                                    \
 	} while (0);
 //special cases of arithmetic expression: ==, !=, >=, <=, > and <
@@ -46,8 +46,7 @@
 	{                                                                     \
 		if ((val1) < (val2) - 0.001 || (val1) > (val2) + 0.001)           \
 		{                                                                 \
-			fprintf(stderr, " [Check failed] %s == %s\n", #val1, #val2);  \
-			exit(1);                                                      \
+			throw std::runtime_error("[Check failed] "#val1" == "#val2);  \
 		}                                                                 \
 	} while (0);
 //expect two c-strings equality
@@ -56,47 +55,55 @@
 	{                                                                         \
 		if (strcmp((val1), (val2) != 0))                                      \
 		{                                                                     \
-			fprintf(stderr, " [Check failed] cstreq(%s, %s)\n", #val1, #val2);\
-			exit (1);                                                         \
+			throw std::runtime_error("[Check failed] cstreq: "#val1", "#val2);\
 		}                                                                     \
 	} while (0);
 
 #include <vector>
 //declare the test class header
-#define Z_BEGIN_TEST_CLASS(name)                                    \
-	class ZTest##name                                               \
-	{                                                               \
-	public:                                                         \
-		typedef void (ZTest##name::*TestCase)();                    \
-		void RegisterTestCase(TestCase testcase)                    \
-		{                                                           \
-			m_testcases.push_back(testcase);                        \
-		}                                                           \
-	private:                                                        \
-		std::vector<TestCase> m_testcases;                          \
-	public:                                                         \
-		void RunAllTest()                                           \
-		{                                                           \
-			unsigned int size = m_testcases.size();                 \
-			for (unsigned int i = 0; i < size; ++ i)                \
-			{                                                       \
-				(this->*m_testcases[i])();                          \
-			}                                                       \
-			fprintf(stderr, "Tatal %u cases, all passed\n", size);  \
+#define Z_BEGIN_TEST_CLASS(name)                                        \
+	class ZTest##name                                                   \
+	{                                                                   \
+	public:                                                             \
+		typedef void (ZTest##name::*TestCase)();                        \
+		void RegisterTestCase(TestCase testcase)                        \
+		{                                                               \
+			m_testcases.push_back(testcase);                            \
+		}                                                               \
+	private:                                                            \
+		std::vector<TestCase> m_testcases;                              \
+	public:                                                             \
+		void RunAllTest()                                               \
+		{                                                               \
+			unsigned int size = m_testcases.size();                     \
+			int count = size;                                           \
+			for (unsigned int i = 0; i < size; ++ i)                    \
+			{                                                           \
+				try                                                     \
+				{                                                       \
+					(this->*m_testcases[i])();                          \
+				}                                                       \
+				catch (const std::runtime_error & error)                \
+				{                                                       \
+					fprintf(stderr, " %s\n", error.what());             \
+					-- count;                                           \
+				}                                                       \
+			}                                                           \
+			fprintf(stderr, "Tatal %u cases, passed %d\n", size, count);\
 		}
 //delcare the test case		
-#define Z_DECLARE_TEST_CASE(a, b)                                     \
-	public:                                                           \
-		void TestCase##a##b()                                         \
-		{                                                             \
-			fprintf(stderr, "Running test case: %s/%s \t", #a, #b);   \
-			Run##a##b();                                              \
-			fprintf(stderr, " [Passed]\n");                           \
-		}                                                             \
-	private:                                                          \
+#define Z_DECLARE_TEST_CASE(a, b)                                       \
+	public:                                                             \
+		void TestCase##a##b()                                           \
+		{                                                               \
+			fprintf(stderr, "Running test case: %s/%s \t", #a, #b);     \
+			Run##a##b();                                                \
+			fprintf(stderr, " [Passed]\n");                             \
+		}                                                               \
+	private:                                                            \
 		void Run##a##b();
 //declare the test class end
-#define Z_END_TEST_CLASS()                                          \
+#define Z_END_TEST_CLASS()                                              \
 	};
 
 //define a instance of the test class used to do the testing
