@@ -17,7 +17,7 @@ Z_DEFINE_TEST_OBJECT(Test, tester)
 //step 3: define the test case
 Z_DEFINE_TEST_CASE(Test, tester, Global, Add)
 {
-	Z_EXPECT_EQ(1 + 3, 4);
+	Z_EXPECT_EQ(1 - 3, 2);
 }
 
 class Test
@@ -41,13 +41,13 @@ private:
 Z_DEFINE_TEST_CASE(Test, tester, Class, Add)
 {
 	Test test;
-	Z_EXPECT_TRUE(test.Add(3, 4) == 8);
+	Z_EXPECT_TRUE(test.Add(3, -4) == -1);
 }
 
 Z_DEFINE_TEST_CASE(Test, tester, Class, Sub)
 {
 	Test test;
-	Z_EXPECT_TRUE(test.Sub(10, 20) == -10);
+	Z_EXPECT_TRUE(test.Sub(10, 20) == 10);
 }
 
 int main()
