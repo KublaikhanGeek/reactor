@@ -15,7 +15,7 @@
 	{                                                      \
 		if (!(cond))                                       \
 		{                                                  \
-			fprintf(stderr, "Check failed: %s\n", #cond);  \
+			fprintf(stderr, " [Check failed] %s\n", #cond);\
 			exit(1);                                       \
 		}                                                  \
 	} while (0);
@@ -28,7 +28,7 @@
 	{                                                                        \
 		if (!((val1) op (val2)))                                             \
 		{                                                                    \
-			fprintf(stderr, "Check failed: %s %s %s\n", #val1, #op, #val2);  \
+			fprintf(stderr, " [Check failed] %s %s %s\n", #val1, #op, #val2);\
 			exit(1);                                                         \
 		}                                                                    \
 	} while (0);
@@ -44,21 +44,21 @@
 #define Z_EXPECT_DOUBLE_EQ(val1, val2)                                    \
 	do                                                                    \
 	{                                                                     \
-		if ((val1) < (val2) - 0.001 || (val1) > (val2) + 0.001))          \
+		if ((val1) < (val2) - 0.001 || (val1) > (val2) + 0.001)           \
 		{                                                                 \
-			fprintf(stderr, "Check failed: %s == %s\n", #val1, #val2);    \
+			fprintf(stderr, " [Check failed] %s == %s\n", #val1, #val2);  \
 			exit(1);                                                      \
 		}                                                                 \
 	} while (0);
 //expect two c-strings equality
-#define Z_EXPECT_CSTR_EQ(val1, val2)                                         \
-	do                                                                       \
-	{                                                                        \
-		if (strcmp((val1), (val2) != 0))                                     \
-		{                                                                    \
-			fprintf(stderr, "Check failed: cstreq(%s, %s)\n", #val1, #val2); \
-			exit (1);                                                        \
-		}                                                                    \
+#define Z_EXPECT_CSTR_EQ(val1, val2)                                          \
+	do                                                                        \
+	{                                                                         \
+		if (strcmp((val1), (val2) != 0))                                      \
+		{                                                                     \
+			fprintf(stderr, " [Check failed] cstreq(%s, %s)\n", #val1, #val2);\
+			exit (1);                                                         \
+		}                                                                     \
 	} while (0);
 
 #include <vector>
@@ -85,15 +85,15 @@
 			fprintf(stderr, "Tatal %u cases, all passed\n", size);  \
 		}
 //delcare the test case		
-#define Z_DECLARE_TEST_CASE(a, b)                                   \
-	public:                                                         \
-		void TestCase##a##b()                                       \
-		{                                                           \
-			fprintf(stderr, "Running test case: %s/%s ...", #a, #b);\
-			Run##a##b();                                            \
-			fprintf(stderr, " [Passed]\n");                         \
-		}                                                           \
-	private:                                                        \
+#define Z_DECLARE_TEST_CASE(a, b)                                     \
+	public:                                                           \
+		void TestCase##a##b()                                         \
+		{                                                             \
+			fprintf(stderr, "Running test case: %s/%s \t", #a, #b);   \
+			Run##a##b();                                              \
+			fprintf(stderr, " [Passed]\n");                           \
+		}                                                             \
+	private:                                                          \
 		void Run##a##b();
 //declare the test class end
 #define Z_END_TEST_CLASS()                                          \

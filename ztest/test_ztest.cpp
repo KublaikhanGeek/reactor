@@ -41,7 +41,7 @@ private:
 Z_DEFINE_TEST_CASE(Test, tester, Class, Add)
 {
 	Test test;
-	Z_EXPECT_TRUE(test.Add(3, 4) == 7);
+	Z_EXPECT_TRUE(test.Add(3, 4) == 8);
 }
 
 Z_DEFINE_TEST_CASE(Test, tester, Class, Sub)
