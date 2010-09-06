@@ -1,7 +1,7 @@
 #define Z_NEED_ACCESS_PRIVATE_MEMBER
 #include "ztest.h"
 
-//if you want to used ztest, just follow 4 steps described below,
+//if you want to use ztest, just follow 4 steps described below,
 //have fun with it :)
 
 //step 1: Declare the test class and the test cases
