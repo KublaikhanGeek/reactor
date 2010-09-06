@@ -54,7 +54,7 @@
 #define Z_EXPECT_CSTR_EQ(val1, val2)                                         \
 	do                                                                       \
 	{                                                                        \
-		if (strcmp((val1), (val2) != 0)                                      \
+		if (strcmp((val1), (val2) != 0))                                     \
 		{                                                                    \
 			fprintf(stderr, "Check failed: cstreq(%s, %s)\n", #val1, #val2); \
 			exit (1);                                                        \
