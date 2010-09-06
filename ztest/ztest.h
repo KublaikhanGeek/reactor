@@ -2,11 +2,11 @@
 #define _XIAO5GEPROJECT_ZTEST_H_
 
 /**
- * @file    ztest.h
+ * @file     ztest.h
  * @brief    A lightweight framework for c++ program's unit testing
- * @author    Wu Zesheng <wuzesheng@wuzesheng.com>
+ * @author   Wu Zesheng <wuzesheng@wuzesheng.com>
  * @since    2010-09-04
- * @version 1.0.0
+ * @version  1.0.0
  */
 
 #include <stdexcept>
