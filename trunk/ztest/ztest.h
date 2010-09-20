@@ -61,47 +61,51 @@
 
 #include <vector>
 //declare the test class header
-#define Z_BEGIN_TEST_CLASS(name)                                        \
-    class ZTest##name                                                   \
-    {                                                                   \
-    public:                                                             \
-        typedef void (ZTest##name::*TestCase)();                        \
-        void RegisterTestCase(TestCase testcase)                        \
-        {                                                               \
-            m_testcases.push_back(testcase);                            \
-        }                                                               \
-    private:                                                            \
-        std::vector<TestCase> m_testcases;                              \
-    public:                                                             \
-        void RunAllTest()                                               \
-        {                                                               \
-            unsigned int size = m_testcases.size();                     \
-            int count = size;                                           \
-            for (unsigned int i = 0; i < size; ++ i)                    \
-            {                                                           \
-                try                                                     \
-                {                                                       \
-                    (this->*m_testcases[i])();                          \
-                }                                                       \
-                catch (const std::runtime_error & error)                \
-                {                                                       \
-                    fprintf(stderr, " %s\n", error.what());             \
-                    -- count;                                           \
-                }                                                       \
-            }                                                           \
-            fprintf(stderr, "Tatal %u cases, passed %d\n", size, count);\
+#define Z_BEGIN_TEST_CLASS(name)                                         \
+    class ZTest##name                                                    \
+    {                                                                    \
+    public:                                                              \
+        typedef void (ZTest##name::*TestCase)();                         \
+        void RegisterTestCase(TestCase testcase)                         \
+        {                                                                \
+            m_testcases.push_back(testcase);                             \
+        }                                                                \
+    private:                                                             \
+        std::vector<TestCase> m_testcases;                               \
+    public:                                                              \
+        void RunAllTest()                                                \
+        {                                                                \
+			fprintf(stderr, "---------------------------------------");  \
+			fprintf(stderr, "---------------------------------------\n");\
+			fprintf(stderr, "Begin running test cases for %s:\n", #name);\
+            unsigned int size = m_testcases.size();                      \
+            int count = size;                                            \
+            for (unsigned int i = 0; i < size; ++ i)                     \
+            {                                                            \
+                try                                                      \
+                {                                                        \
+					fprintf(stderr, "[%d] ", i);                         \
+                    (this->*m_testcases[i])();                           \
+                }                                                        \
+                catch (const std::runtime_error & error)                 \
+                {                                                        \
+                    fprintf(stderr, " %s\n", error.what());              \
+                    -- count;                                            \
+                }                                                        \
+            }                                                            \
+            fprintf(stderr, "Tatal %u cases, passed %d\n", size, count); \
         }
 //delcare the test case        
-#define Z_DECLARE_TEST_CASE(a, b)                                       \
+#define Z_DECLARE_TEST_CASE(a)                                          \
     public:                                                             \
-        void TestCase##a##b()                                           \
+        void TestCase##a()                                              \
         {                                                               \
-            fprintf(stderr, "Running test case: %s/%s \t", #a, #b);     \
-            Run##a##b();                                                \
+            fprintf(stderr, "Running test case: %s \t", #a);            \
+            Run##a();                                                   \
             fprintf(stderr, " [Passed]\n");                             \
         }                                                               \
     private:                                                            \
-        void Run##a##b();
+        void Run##a();
 //declare the test class end
 #define Z_END_TEST_CLASS()                                              \
     };
@@ -109,17 +113,17 @@
 //define a instance of the test class used to do the testing
 #define Z_DEFINE_TEST_OBJECT(name, obj) ZTest##name obj;
 //define a test case
-#define Z_DEFINE_TEST_CASE(name, obj, a, b)                         \
-    class ZTestCase##a##b                                           \
+#define Z_DEFINE_TEST_CASE(name, obj, a)                            \
+    class ZTestCase##a                                              \
     {                                                               \
     public:                                                         \
-        ZTestCase##a##b(ZTest##name & tester)                       \
+        ZTestCase##a(ZTest##name & tester)                          \
         {                                                           \
-            tester.RegisterTestCase(&ZTest##name::TestCase##a##b);  \
+            tester.RegisterTestCase(&ZTest##name::TestCase##a);     \
         }                                                           \
     };                                                              \
-    static ZTestCase##a##b g_test_##name##_case_##a##_##b(obj);     \
-    void ZTest##name::Run##a##b()
+    static ZTestCase##a g_test_##name##_case_##a(obj);              \
+    void ZTest##name::Run##a()
 //run all the defined test cases
 #define Z_RUN_ALL_TESTCASES(obj) obj.RunAllTest();
 
