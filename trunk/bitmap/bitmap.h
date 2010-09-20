@@ -1,6 +1,14 @@
 #ifndef _XIAO5GEPROJECT_BITMAP_H_
 #define _XIAO5GEPROJECT_BITMAP_H_
 
+/**
+ * @file    bitmap.h
+ * @brief   A bitmap implementation class
+ * @author  Wu Zesheng <wuzesheng@wuzesheng.com>
+ * @since   2010-09-20
+ * @version 1.0.0
+ */
+
 class Bitmap
 {
 public:
@@ -16,6 +24,7 @@ public:
 		delete [] m_bit_vector;
 	}
 
+	///set the bit at position 'pos'
 	void Set(size_t pos)
 	{
 		size_t index = pos / s_char_size;
@@ -23,6 +32,7 @@ public:
 		m_bit_vector[index] |= (0x1 << offset);
 	}
 
+	///determine whether the bit at position 'pos' is set
 	bool IsSet(size_t pos) const
 	{
 		size_t index = pos / s_char_size;
