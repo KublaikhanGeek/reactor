@@ -36,8 +36,11 @@ public:
 		m_bit_vector[index] |= (0x1 << offset);
 	}
 
+    void Clear(size_t pos)
+    {}
+
 	///determine whether the bit at position 'pos' is set
-	bool IsSet(size_t pos) const
+	bool Test(size_t pos) const
 	{
         assert(pos < 1024);
 		size_t index = pos / s_char_size;
@@ -57,7 +60,11 @@ private:
 
     size_t m_size;
 
-	static const char s_char_size = 8;
+	static const int s_char_size = 8;
+
+    static const int s_shift = 3;
+
+    static const int s_mask = 0x7;
 };
 
 #endif //_XIAO5GEPROJECT_BITMAP_H_
