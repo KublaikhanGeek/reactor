@@ -1,15 +1,15 @@
 #include <ztest/ztest.h>
 #include "bitmap.h"
 
-Z_BEGIN_TEST_CLASS(Tester)
-    Z_DECLARE_TEST_CASE(bitmap, set)
-    Z_DECLARE_TEST_CASE(bitmap, clear)
-    Z_DECLARE_TEST_CASE(bitmap, size)
+Z_BEGIN_TEST_CLASS(Bitmap)
+    Z_DECLARE_TEST_CASE(set)
+    Z_DECLARE_TEST_CASE(clear)
+    Z_DECLARE_TEST_CASE(size)
 Z_END_TEST_CLASS()
 
-Z_DEFINE_TEST_OBJECT(Tester, tester);
+Z_DEFINE_TEST_OBJECT(Bitmap, tester);
 
-Z_DEFINE_TEST_CASE(Tester, tester, bitmap, set)
+Z_DEFINE_TEST_CASE(Bitmap, tester, set)
 {
     Bitmap bitmap;
 
@@ -17,7 +17,7 @@ Z_DEFINE_TEST_CASE(Tester, tester, bitmap, set)
     Z_EXPECT_TRUE(bitmap.Test(1000));
 }
 
-Z_DEFINE_TEST_CASE(Tester, tester, bitmap, clear)
+Z_DEFINE_TEST_CASE(Bitmap, tester, clear)
 {
     Bitmap bitmap;
 
@@ -27,7 +27,7 @@ Z_DEFINE_TEST_CASE(Tester, tester, bitmap, clear)
     Z_EXPECT_FALSE(bitmap.Test(100));
 }
 
-Z_DEFINE_TEST_CASE(Tester, tester, bitmap, size)
+Z_DEFINE_TEST_CASE(Bitmap, tester, size)
 {
     Bitmap bitmap(4096);
     Z_EXPECT_EQ(bitmap.Size(), 4096);
