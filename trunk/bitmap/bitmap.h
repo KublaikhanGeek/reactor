@@ -1,8 +1,6 @@
 #ifndef _XIAO5GEPROJECT_BITMAP_H_
 #define _XIAO5GEPROJECT_BITMAP_H_
 
-#include <assert.h>
-
 /**
  * @file    bitmap.h
  * @brief   A bitmap implementation class
@@ -10,6 +8,8 @@
  * @since   2010-09-20
  * @version 1.0.0
  */
+
+#include <assert.h>
 
 class Bitmap
 {
