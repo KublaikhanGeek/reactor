@@ -5,22 +5,16 @@
 //have fun with it :)
 
 //step 1: Declare the test class and the test cases
-Z_BEGIN_TEST_CLASS(Test)
-    Z_DECLARE_TEST_CASE(Global, Add)
-    Z_DECLARE_TEST_CASE(Class, Add)
-    Z_DECLARE_TEST_CASE(Class, Sub)
+Z_BEGIN_TEST_CLASS(Calculator)
+    Z_DECLARE_TEST_CASE(Add)
+    Z_DECLARE_TEST_CASE(Sub)
 Z_END_TEST_CLASS()
 
 //step 2: define a object of the type of the test class declared int step 1
-Z_DEFINE_TEST_OBJECT(Test, tester)
+Z_DEFINE_TEST_OBJECT(Calculator, tester)
 
 //step 3: define the test case
-Z_DEFINE_TEST_CASE(Test, tester, Global, Add)
-{
-    Z_EXPECT_EQ(1 - 3, 2);
-}
-
-class Test
+class Calculator
 {
 public:
     int Add(int a, int b)
@@ -35,19 +29,19 @@ private:
         return a - b;
     }
 
-    Z_DECLARE_FRIEND(Test);
+    Z_DECLARE_FRIEND(Calculator);
 };
 
-Z_DEFINE_TEST_CASE(Test, tester, Class, Add)
+Z_DEFINE_TEST_CASE(Calculator, tester, Add)
 {
-    Test test;
-    Z_EXPECT_TRUE(test.Add(3, -4) == -1);
+    Calculator cal;
+    Z_EXPECT_TRUE(cal.Add(3, -4) == -1);
 }
 
-Z_DEFINE_TEST_CASE(Test, tester, Class, Sub)
+Z_DEFINE_TEST_CASE(Calculator, tester, Sub)
 {
-    Test test;
-    Z_EXPECT_TRUE(test.Sub(10, 20) == 10);
+    Calculator cal;
+    Z_EXPECT_TRUE(cal.Sub(10, 20) == 10);
 }
 
 int main()
