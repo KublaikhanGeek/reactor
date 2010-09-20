@@ -75,9 +75,9 @@
     public:                                                              \
         void RunAllTest()                                                \
         {                                                                \
-			fprintf(stderr, "---------------------------------------");  \
-			fprintf(stderr, "---------------------------------------\n");\
-			fprintf(stderr, "Begin running test cases for %s:\n", #name);\
+			fprintf(stderr, "--------------------------------------");   \
+			fprintf(stderr, "--------------------------------------\n"); \
+			fprintf(stderr, "Begin running test cases of %s:\n", #name); \
             unsigned int size = m_testcases.size();                      \
             int count = size;                                            \
             for (unsigned int i = 0; i < size; ++ i)                     \
