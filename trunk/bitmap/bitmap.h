@@ -31,21 +31,21 @@ public:
 	void Set(size_t pos)
 	{
         assert(pos < 1024);
-		size_t index = pos / s_char_size;
-		size_t offset = pos % s_char_size;
-		m_bit_vector[index] |= (0x1 << offset);
+		m_bit_vector[pos>>s_shift] |= (1<<(pos & s_mask));
 	}
 
+	///clear the bit at position 'pos'
     void Clear(size_t pos)
-    {}
+    {
+        assert(pos < 1024);
+		m_bit_vector[pos>>s_shift] &= ~(1<<(pos & s_mask));
+	}
 
 	///determine whether the bit at position 'pos' is set
 	bool Test(size_t pos) const
 	{
         assert(pos < 1024);
-		size_t index = pos / s_char_size;
-		size_t offset = pos % s_char_size;
-		return ((m_bit_vector[index] >> offset) & 0x1) == 1;
+		return !((m_bit_vector[pos>>s_shift] & (1<<(pos & s_mask))) == 0);
 	}
 
     ///get the bitmap size
