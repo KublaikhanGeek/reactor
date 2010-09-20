@@ -33,7 +33,7 @@ Z_DEFINE_TEST_CASE(Bitmap, tester, size)
     Z_EXPECT_EQ(bitmap.Size(), 4096);
 
     Bitmap bitmap2(512);
-    Z_EXPECT_NE(bitmap.Size(), 1024);
+    Z_EXPECT_NE(bitmap2.Size(), 1024);
 }
 
 int main()
