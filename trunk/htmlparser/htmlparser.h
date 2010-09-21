@@ -20,7 +20,7 @@ class EventHandler
 public:
 
 	explicit EventHandler(const char * tag) :
-		m_tag(tag)
+        m_tag(tag)
 	{}
 
 	virtual bool OnEvent(
