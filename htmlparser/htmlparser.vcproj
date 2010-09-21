@@ -192,7 +192,15 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\gen_res.sh"
+				>
+			</File>
+			<File
 				RelativePath=".\input1.html"
+				>
+			</File>
+			<File
+				RelativePath=".\res1.txt"
 				>
 			</File>
 		</Filter>
