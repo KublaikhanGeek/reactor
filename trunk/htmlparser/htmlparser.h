@@ -95,7 +95,8 @@ public:
 			{
 				//meets a tag
 				std::string tag(cur_pos, pos - cur_pos);
-				iter = m_handler_table.find(tag);
+				AllToLower(tag);
+                iter = m_handler_table.find(tag);
 				if (iter != m_handler_table.end())
 				{
 					if (iter->second->OnEvent(m_begin_pos, 
@@ -109,6 +110,20 @@ public:
 			++ cur_pos;
 		}
 	}
+
+private:
+
+    void AllToLower(std::string & str)
+    {
+        size_t size = str.size();
+        for (size_t i = 0; i < size; ++ i)
+        {
+            if (str[i] >= 'A' && str[i] <= 'Z')
+            {
+                str[i] += 'a' - 'A';
+            }
+        }
+    }
 
 private:
 
