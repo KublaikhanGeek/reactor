@@ -9,11 +9,11 @@ Z_END_TEST_CLASS()
 
 Z_DEFINE_TEST_OBJECT(HtmlParser, tester);
 
-class ParseATag : public EventHandler
+class ATagHandler : public EventHandler
 {
 public:
 
-    explicit ParseATag(const char * tag) :
+    explicit ATagHandler(const char * tag) :
         EventHandler(tag)
     {}
 
@@ -47,6 +47,8 @@ Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref)
     }
 
     HtmlParser parser(buffer, len);
+    parser.RegisterHandler(new ATagHandler("<a"));
+    parser.Parse();
 }
 
 int main()
