@@ -75,16 +75,16 @@
     public:                                                              \
         void RunAllTest()                                                \
         {                                                                \
-			fprintf(stderr, "\n--------------------------------------"); \
-			fprintf(stderr, "--------------------------------------\n"); \
-			fprintf(stderr, "Begin running test cases of %s:\n", #name); \
+            fprintf(stderr, "\n--------------------------------------"); \
+            fprintf(stderr, "--------------------------------------\n"); \
+            fprintf(stderr, "Begin running test cases of %s:\n", #name); \
             unsigned int size = m_testcases.size();                      \
             int count = size;                                            \
             for (unsigned int i = 0; i < size; ++ i)                     \
             {                                                            \
                 try                                                      \
                 {                                                        \
-					fprintf(stderr, "[%d] ", i);                         \
+                    fprintf(stderr, "[%d] ", i);                         \
                     (this->*m_testcases[i])();                           \
                 }                                                        \
                 catch (const std::runtime_error & error)                 \

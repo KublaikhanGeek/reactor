@@ -15,38 +15,38 @@ class Bitmap
 {
 public:
 
-	Bitmap(size_t size = 1024)
-	{
+    Bitmap(size_t size = 1024)
+    {
         m_size = size;
-		m_bit_vector = new char[size>>s_shift];
+        m_bit_vector = new char[size>>s_shift];
         ::memset(m_bit_vector, 0, size>>s_shift);
-	}
+    }
 
-	~Bitmap()
-	{
-		delete [] m_bit_vector;
-	}
+    ~Bitmap()
+    {
+        delete [] m_bit_vector;
+    }
 
-	///set the bit at position 'pos'
-	void Set(size_t pos)
-	{
+    ///set the bit at position 'pos'
+    void Set(size_t pos)
+    {
         assert(pos < m_size);
-		m_bit_vector[pos>>s_shift] |= (1<<(pos & s_mask));
-	}
+        m_bit_vector[pos>>s_shift] |= (1<<(pos & s_mask));
+    }
 
-	///clear the bit at position 'pos'
+    ///clear the bit at position 'pos'
     void Clear(size_t pos)
     {
         assert(pos < m_size);
-		m_bit_vector[pos>>s_shift] &= ~(1<<(pos & s_mask));
-	}
+        m_bit_vector[pos>>s_shift] &= ~(1<<(pos & s_mask));
+    }
 
-	///determine whether the bit at position 'pos' is set
-	bool Test(size_t pos) const
-	{
+    ///determine whether the bit at position 'pos' is set
+    bool Test(size_t pos) const
+    {
         assert(pos < m_size);
-		return !((m_bit_vector[pos>>s_shift] & (1<<(pos & s_mask))) == 0);
-	}
+        return !((m_bit_vector[pos>>s_shift] & (1<<(pos & s_mask))) == 0);
+    }
 
     ///get the bitmap size
     size_t Size() const
@@ -56,11 +56,11 @@ public:
 
 private:
 
-	char * m_bit_vector;
+    char * m_bit_vector;
 
     size_t m_size;
 
-	static const int s_char_size = 8;
+    static const int s_char_size = 8;
 
     static const int s_shift = 3;
 
