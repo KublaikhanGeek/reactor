@@ -19,97 +19,97 @@ class EventHandler
 {
 public:
 
-	explicit EventHandler(const char * tag) :
+    explicit EventHandler(const char * tag) :
         m_tag(tag)
-	{}
+    {}
 
-	virtual bool OnEvent(
-			const char * begin_pos, //the page's begin pointer
-			size_t len,             //the page's length
-			const char *& cur_pos   //the current processed position
-			) = 0;
+    virtual bool OnEvent(
+            const char * begin_pos, //the page's begin pointer
+            size_t len,             //the page's length
+            const char *& cur_pos   //the current processed position
+            ) = 0;
 
-	const char * GetTag() const
-	{
-		return m_tag.c_str();
-	}
+    const char * GetTag() const
+    {
+        return m_tag.c_str();
+    }
 
 private:
 
-	//html tag, for example: <script, </html
-	std::string m_tag;
+    //html tag, for example: <script, </html
+    std::string m_tag;
 };
 
 class HtmlParser
 {
 public:
 
-	HtmlParser(const char * begin_pos = NULL, size_t len = 0) :
-		m_begin_pos(begin_pos),
-		m_len(len)
-	{
-	}
+    HtmlParser(const char * begin_pos = NULL, size_t len = 0) :
+        m_begin_pos(begin_pos),
+        m_len(len)
+    {
+    }
 
-	//set the page for the parser to parse
-	void SetPage(const char * begin_pos, size_t len)
-	{
-		m_begin_pos = begin_pos;
-		m_len = len;
-	}
+    //set the page for the parser to parse
+    void SetPage(const char * begin_pos, size_t len)
+    {
+        m_begin_pos = begin_pos;
+        m_len = len;
+    }
 
 private:
 
-	typedef std::map<std::string, EventHandler *> HandlerTable;
+    typedef std::map<std::string, EventHandler *> HandlerTable;
 
 public:
 
-	//register an event handler to the parser
-	void RegisterHandler(EventHandler * handler)
-	{
-		m_handler_table[handler->GetTag()] = handler;
-	}
+    //register an event handler to the parser
+    void RegisterHandler(EventHandler * handler)
+    {
+        m_handler_table[handler->GetTag()] = handler;
+    }
 
-	//unregister an event handler from the parser
-	void UnregisterHandler(EventHandler * handler)
-	{
-		m_handler_table.erase(handler->GetTag());
-	}
+    //unregister an event handler from the parser
+    void UnregisterHandler(EventHandler * handler)
+    {
+        m_handler_table.erase(handler->GetTag());
+    }
 
-	//parse the page
-	void Parse()
-	{
-		const char * cur_pos = m_begin_pos;
-		HandlerTable::iterator iter;
+    //parse the page
+    void Parse()
+    {
+        const char * cur_pos = m_begin_pos;
+        HandlerTable::iterator iter;
 
-		//traverse the page
-		while (cur_pos < m_begin_pos + m_len)
-		{
-			if (*cur_pos != '<')
-			{
-				++ cur_pos;
-				continue;
-			}
+        //traverse the page
+        while (cur_pos < m_begin_pos + m_len)
+        {
+            if (*cur_pos != '<')
+            {
+                ++ cur_pos;
+                continue;
+            }
 
-			const char * pos = strchr(cur_pos, ' ');
-			if (NULL != pos)
-			{
-				//meets a tag
-				std::string tag(cur_pos, pos - cur_pos);
-				AllToLower(tag);
+            const char * pos = strchr(cur_pos, ' ');
+            if (NULL != pos)
+            {
+                //meets a tag
+                std::string tag(cur_pos, pos - cur_pos);
+                AllToLower(tag);
                 iter = m_handler_table.find(tag);
-				if (iter != m_handler_table.end())
-				{
-					if (iter->second->OnEvent(m_begin_pos, 
-								m_len, cur_pos))
-					{
-						continue;
-					}
-				}
-			}
+                if (iter != m_handler_table.end())
+                {
+                    if (iter->second->OnEvent(m_begin_pos, 
+                                m_len, cur_pos))
+                    {
+                        continue;
+                    }
+                }
+            }
 
-			++ cur_pos;
-		}
-	}
+            ++ cur_pos;
+        }
+    }
 
 private:
 
@@ -127,14 +127,14 @@ private:
 
 private:
 
-	//the event handler talbe
-	HandlerTable m_handler_table;
+    //the event handler talbe
+    HandlerTable m_handler_table;
 
-	//the page's begin pointer
-	const char * m_begin_pos;
+    //the page's begin pointer
+    const char * m_begin_pos;
 
-	//the page's length
-	size_t m_len;
+    //the page's length
+    size_t m_len;
 };
 
 #endif //_XIAO5GEPROJECT_HTML_PARSER_H_
