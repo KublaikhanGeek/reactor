@@ -1,5 +1,5 @@
 #ifndef _XIAO5GEPROJECT_HTML_PARSER_H_
-#ifndef _XIAO5GEPROJECT_HTML_PARSER_H_
+#define _XIAO5GEPROJECT_HTML_PARSER_H_
 
 /**
  * @file    htmlparser
@@ -123,4 +123,3 @@ private:
 };
 
 #endif //_XIAO5GEPROJECT_HTML_PARSER_H_
-
