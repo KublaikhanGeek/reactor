@@ -1,3 +1,4 @@
+#include <set>
 #include <ztest/ztest.h>
 #include "htmlparser.h"
 
@@ -31,6 +32,16 @@ public:
         }
         return false;
     }
+
+private:
+
+    std::string ParseHrefUrl(const char * begin, size_t len)
+    {
+    }
+
+public:
+
+    std::set<std::string> m_url_set;
 };
 
 Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref)
@@ -40,15 +51,23 @@ Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref)
     char buffer[s_max_page_len] = {0};
     size_t len = 0;
     size_t num = 0;
-
     while ((num = fread(buffer + len, 1, 1024, fp)) > 0)
     {
         len += num;
     }
+    fclose(fp);
+
+    fp = fopen("res1.txt", "r");
+    std::set<std::string> urlset;
+
+    flocse(fp);
 
     HtmlParser parser(buffer, len);
-    parser.RegisterHandler(new ATagHandler("<a"));
+    EventHandler handler = new ATagHandler("<a");
+    parser.RegisterHandler(handler);
     parser.Parse();
+
+    Z_EXPECT_EQ(urlset, handler->m_url_set);
 }
 
 int main()
