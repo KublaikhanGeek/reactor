@@ -23,7 +23,7 @@ public:
         const char * pos = strchr(cur_pos, '>');
         if (pos != NULL)
         {
-            std::string content(cur_pos, pos - cur_pos);
+            std::string content(cur_pos, pos - cur_pos + 1);
             printf("%s\n", content.c_str());
         
             cur_pos = pos + 1;
