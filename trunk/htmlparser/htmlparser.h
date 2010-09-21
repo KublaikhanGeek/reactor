@@ -42,6 +42,10 @@ private:
 
 class HtmlParser
 {
+private:
+
+    typedef std::map<std::string, EventHandler *> HandlerTable;
+
 public:
 
     HtmlParser(const char * begin_pos = NULL, size_t len = 0) :
@@ -50,16 +54,22 @@ public:
     {
     }
 
+    ~HtmlParser()
+    {
+        HandlerTable::iterator it = m_handler_table.begin();
+        while (it != m_handler_table.end())
+        {
+            delete it->second;
+            ++ it;
+        }
+    }
+
     //set the page for the parser to parse
     void SetPage(const char * begin_pos, size_t len)
     {
         m_begin_pos = begin_pos;
         m_len = len;
     }
-
-private:
-
-    typedef std::map<std::string, EventHandler *> HandlerTable;
 
 public:
 
@@ -72,7 +82,12 @@ public:
     //unregister an event handler from the parser
     void UnregisterHandler(EventHandler * handler)
     {
-        m_handler_table.erase(handler->GetTag());
+        HandlerTable::iterator it = m_handler_table.find(handler->GetTag());
+        if (it != m_handler_table.end())
+        {
+            delete it->second;
+            m_handler_table.erase(it);
+        }
     }
 
     //parse the page
