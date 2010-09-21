@@ -35,7 +35,7 @@ public:
 
 Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref)
 {
-    static const int s_max_page_len = (1<<20);
+    static const int s_max_page_len = (512<<10);
     FILE * fp = fopen("input1.html", "r");
     char buffer[s_max_page_len] = {0};
     size_t len = 0;
