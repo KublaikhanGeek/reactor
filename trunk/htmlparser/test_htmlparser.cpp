@@ -59,7 +59,6 @@ Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref)
 
     fp = fopen("res1.txt", "r");
     std::set<std::string> urlset;
-
     flocse(fp);
 
     HtmlParser parser(buffer, len);
