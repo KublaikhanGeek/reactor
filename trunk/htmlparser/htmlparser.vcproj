@@ -200,7 +200,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\input2.html"
+				>
+			</File>
+			<File
+				RelativePath=".\input3.html"
+				>
+			</File>
+			<File
 				RelativePath=".\res1.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\res2.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\res3.txt"
 				>
 			</File>
 		</Filter>
