@@ -109,16 +109,19 @@ bool TestGetAHref(const char * input, const char * res)
     return urlset == handler->m_urlset;
 }
 
+//qq.com
 Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref1)
 {
     Z_EXPECT_TRUE(TestGetAHref("input1.html", "res1.txt"));
 }
 
+//soso.com
 Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref2)
 {
     Z_EXPECT_TRUE(TestGetAHref("input2.html", "res2.txt"));
 }
 
+//wuzesheng.com
 Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref3)
 {
     Z_EXPECT_TRUE(TestGetAHref("input3.html", "res3.txt"));
