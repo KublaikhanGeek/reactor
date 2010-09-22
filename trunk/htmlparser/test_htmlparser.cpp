@@ -6,7 +6,9 @@
 #pragma warning(disable: 4996)
 
 Z_BEGIN_TEST_CLASS(HtmlParser)
-    Z_DECLARE_TEST_CASE(GetAHref)
+    Z_DECLARE_TEST_CASE(GetAHref1)
+    Z_DECLARE_TEST_CASE(GetAHref2)
+    Z_DECLARE_TEST_CASE(GetAHref3)
 Z_END_TEST_CLASS()
 
 Z_DEFINE_TEST_OBJECT(HtmlParser, tester);
@@ -77,10 +79,10 @@ public:
     std::set<std::string> m_urlset;
 };
 
-Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref)
+bool TestGetAHref(const char * input, const char * res)
 {
     static const int s_max_page_len = (512<<10);
-    FILE * fp = fopen("input1.html", "r");
+    FILE * fp = fopen(input, "r");
     char buffer[s_max_page_len] = {0};
     size_t len = 0;
     size_t num = 0;
@@ -90,7 +92,7 @@ Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref)
     }
     fclose(fp);
 
-	std::ifstream fin("res1.txt");
+	std::ifstream fin(res);
     std::set<std::string> urlset;
 	std::string url;
 	while (std::getline(fin, url))
@@ -104,14 +106,22 @@ Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref)
     parser.RegisterHandler(handler);
     parser.Parse();
 
-    std::set<std::string>::iterator it = handler->m_urlset.begin();
-    while (it != handler->m_urlset.end())
-    {
-        printf("%s\n", it->c_str());
-        Z_EXPECT_TRUE(urlset.find(*it) != urlset.end());
-        ++ it;
-    }
-    Z_EXPECT_EQ(urlset, handler->m_urlset);
+    return urlset == handler->m_urlset;
+}
+
+Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref1)
+{
+    Z_EXPECT_TRUE(TestGetAHref("input1.html", "res1.txt"));
+}
+
+Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref2)
+{
+    Z_EXPECT_TRUE(TestGetAHref("input2.html", "res2.txt"));
+}
+
+Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref3)
+{
+    Z_EXPECT_TRUE(TestGetAHref("input3.html", "res3.txt"));
 }
 
 int main()
