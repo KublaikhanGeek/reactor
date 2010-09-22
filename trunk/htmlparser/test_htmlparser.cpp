@@ -1,4 +1,5 @@
 #include <set>
+#include <fstream>
 #include <ztest/ztest.h>
 #include "htmlparser.h"
 
@@ -41,7 +42,7 @@ private:
 
 public:
 
-    std::set<std::string> m_url_set;
+    std::set<std::string> m_urlset;
 };
 
 Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref)
@@ -57,16 +58,21 @@ Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref)
     }
     fclose(fp);
 
-    fp = fopen("res1.txt", "r");
+	std::ifstream fin("res1.txt");
     std::set<std::string> urlset;
-    flocse(fp);
+	std::string url;
+	while (std::getline(fin, url))
+	{
+		urlset.insert(url);
+	}
+	fin.close();
 
     HtmlParser parser(buffer, len);
-    EventHandler handler = new ATagHandler("<a");
+    ATagHandler * handler = new ATagHandler("<a");
     parser.RegisterHandler(handler);
     parser.Parse();
 
-    Z_EXPECT_EQ(urlset, handler->m_url_set);
+    Z_EXPECT_EQ(urlset, handler->m_urlset);
 }
 
 int main()
