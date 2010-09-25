@@ -79,6 +79,33 @@ public:
     std::set<std::string> m_urlset;
 };
 
+class CommentHandler : public EventHandler
+{
+public:
+
+    explicit CommentHandler(const char * tag) :
+        EventHandler(tag)
+    {}
+
+    bool OnEvent(const char * begin_pos, size_t len, 
+        const char *& cur_pos)
+    {
+        const char * pos = cur_pos;
+        while (pos < begin_pos + len)
+        {
+            if (pos + 2 < begin_pos &&
+                    pos[0] == '-' && pos[1] == '-' &&
+                    pos[2] == '>')
+            {
+                cur_pos = pos + 3;
+                return true;
+            }
+            ++ pos;
+        }
+        return false;
+    }
+};
+
 bool TestGetAHref(const char * input, const char * res)
 {
     static const int s_max_page_len = (512<<10);
@@ -102,11 +129,12 @@ bool TestGetAHref(const char * input, const char * res)
 	fin.close();
 
     HtmlParser parser(buffer, len);
-    ATagHandler * handler = new ATagHandler("<a");
-    parser.RegisterHandler(handler);
+    ATagHandler * ahandler = new ATagHandler("<a");
+    parser.RegisterHandler(ahandler);
+    parser.RegisterHandler(new CommentHandler("<!--"));
     parser.Parse();
 
-    return urlset == handler->m_urlset;
+    return urlset == ahandler->m_urlset;
 }
 
 //qq.com
