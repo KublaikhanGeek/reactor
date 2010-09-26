@@ -115,9 +115,8 @@ Z_DEFINE_TEST_CASE(HtmlParser, tester, GetTitle)
 
     parser.Parse();
 
-    printf("%s\n", title_handler->GetTitle().c_str());
     Z_EXPECT_EQ(title_handler->GetTitle(), 
-        std::string("小武哥的博客 - 左手程序右手诗"));
+        std::string("cplusplus.com - The C++ Resources Network"));
 }
 
 int main()

@@ -19,8 +19,9 @@ class EventHandler
 {
 public:
 
-    explicit EventHandler(const char * tag) :
-        m_tag(tag)
+    explicit EventHandler(const char * tag, bool flag = true) :
+        m_tag(tag),
+        m_delete(flag)
     {}
 
     virtual bool OnEvent(
@@ -34,10 +35,18 @@ public:
         return m_tag.c_str();
     }
 
+    bool IsNeedDelete() const
+    {
+        return m_delete;
+    }
+
 private:
 
     //html tag, for example: <script, </html
     std::string m_tag;
+
+    //the flag of whether the handler is need to be deleted
+    bool m_delete;
 };
 
 #ifndef STRNCASECMP
@@ -67,7 +76,10 @@ public:
         HandlerTable::iterator it = m_handler_table.begin();
         while (it != m_handler_table.end())
         {
-            delete it->second;
+            if (it->second->IsNeedDelete())
+            {
+                delete it->second;
+            }
             ++ it;
         }
     }
