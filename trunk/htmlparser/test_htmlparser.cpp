@@ -1,83 +1,17 @@
+#include <assert.h>
+
 #include <set>
-#include <fstream>
+
 #include <ztest/ztest.h>
 #include "htmlparser.h"
 
 #pragma warning(disable: 4996)
 
 Z_BEGIN_TEST_CLASS(HtmlParser)
-    Z_DECLARE_TEST_CASE(GetAHref1)
-    Z_DECLARE_TEST_CASE(GetAHref2)
-    Z_DECLARE_TEST_CASE(GetAHref3)
+    Z_DECLARE_TEST_CASE(GetTitle)
 Z_END_TEST_CLASS()
 
 Z_DEFINE_TEST_OBJECT(HtmlParser, tester);
-
-class ATagHandler : public EventHandler
-{
-public:
-
-    explicit ATagHandler(const char * tag) :
-        EventHandler(tag)
-    {}
-
-    bool OnEvent(const char * begin_pos, size_t len, 
-        const char *& cur_pos)
-    {
-        const char * pos = strchr(cur_pos, '>');
-        if (pos != NULL)
-        {
-			std::string url = ParseHrefUrl(cur_pos, pos - cur_pos + 1);
-            if (!url.empty() && url.find("http://") != std::string::npos)
-			{
-				m_urlset.insert(url);
-			}
-        
-            cur_pos = pos + 1;
-            return true;
-        }
-        return false;
-    }
-
-private:
-
-    std::string ParseHrefUrl(const char * begin, size_t len)
-    {
-		std::string content(begin, len);
-		std::string::size_type pos = content.find("href=");
-		if (pos != std::string::npos)
-		{
-			std::string::size_type end_pos = std::string::npos;
-			if (content[pos + 5] == '"')
-			{
-				end_pos = content.find('"', pos + 6);
-				if (end_pos != std::string::npos)
-				{
-				    return std::string(content.substr(pos + 6, 
-                        end_pos - pos - 6));
-			    }
-			}
-			else
-			{
-				end_pos = content.find(' ', pos + 5);
-				if (end_pos == std::string::npos)
-				{
-					end_pos = content.find('>', pos + 5);
-				}
-                if (end_pos != std::string::npos)
-				{
-				    return std::string(content.substr(pos + 5, 
-                        end_pos - pos - 5));
-                }
-            }
-		}
-        return std::string("");
-    }
-
-public:
-
-    std::set<std::string> m_urlset;
-};
 
 class CommentHandler : public EventHandler
 {
@@ -93,7 +27,7 @@ public:
         const char * pos = cur_pos;
         while (pos < begin_pos + len)
         {
-            if (pos + 2 < begin_pos &&
+            if (pos + 2 < begin_pos + len &&
                     pos[0] == '-' && pos[1] == '-' &&
                     pos[2] == '>')
             {
@@ -106,53 +40,83 @@ public:
     }
 };
 
-bool TestGetAHref(const char * input, const char * res)
+class TitleHandler : public EventHandler
 {
-    static const int s_max_page_len = (512<<10);
+public:
+
+    explicit TitleHandler(const char * tag) :
+        EventHandler(tag)
+    {}
+
+    bool OnEvent(const char * begin_pos, size_t len,
+        const char *& cur_pos)
+    {
+        const char * pos = cur_pos + 1;
+        const char * begin = NULL;
+        const char * end = NULL;
+        while (pos < begin_pos + len)
+        {
+            if ('>' == *pos)
+            {
+                begin = pos + 1;
+            }
+            else if ('<' == *pos)
+            {
+                end = pos;
+                break;
+            }
+            ++ pos;
+        }
+
+        if (NULL != begin && NULL != end)
+        {
+            m_title = std::string(begin, end - begin);
+            cur_pos = pos + 1;
+            return true;
+        }
+        return false;
+    }
+
+    const std::string & GetTitle() const
+    {
+        return m_title;
+    }
+
+private:
+
+    std::string m_title;
+};
+
+size_t ReadInput(const char * input, char * buffer, size_t buf_len)
+{
     FILE * fp = fopen(input, "r");
-    char buffer[s_max_page_len] = {0};
+    memset(buffer, 0, buf_len);
     size_t len = 0;
     size_t num = 0;
     while ((num = fread(buffer + len, 1, 1024, fp)) > 0)
     {
+        assert(len + num < buf_len);
         len += num;
     }
     fclose(fp);
 
-	std::ifstream fin(res);
-    std::set<std::string> urlset;
-	std::string url;
-	while (std::getline(fin, url))
-	{
-		urlset.insert(url);
-	}
-	fin.close();
+    return len;
+}
+
+Z_DEFINE_TEST_CASE(HtmlParser, tester, GetTitle)
+{
+    static char buffer[512<<20];
+    size_t len = ReadInput("input.html", buffer, 512<<10);
 
     HtmlParser parser(buffer, len);
-    ATagHandler * ahandler = new ATagHandler("<a");
-    parser.RegisterHandler(ahandler);
     parser.RegisterHandler(new CommentHandler("<!--"));
+    TitleHandler * title_handler = new TitleHandler("<title");
+    parser.RegisterHandler(title_handler);
+
     parser.Parse();
 
-    return urlset == ahandler->m_urlset;
-}
-
-//qq.com
-Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref1)
-{
-    Z_EXPECT_TRUE(TestGetAHref("input1.html", "res1.txt"));
-}
-
-//soso.com
-Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref2)
-{
-    Z_EXPECT_TRUE(TestGetAHref("input2.html", "res2.txt"));
-}
-
-//wuzesheng.com
-Z_DEFINE_TEST_CASE(HtmlParser, tester, GetAHref3)
-{
-    Z_EXPECT_TRUE(TestGetAHref("input3.html", "res3.txt"));
+    Z_EXPECT_EQ(title_handler->GetTitle(), 
+        std::string("小武哥的博客 - 左手程序右手诗"));
 }
 
 int main()
