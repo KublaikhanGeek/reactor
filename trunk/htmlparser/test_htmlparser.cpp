@@ -13,6 +13,7 @@ Z_END_TEST_CLASS()
 
 Z_DEFINE_TEST_OBJECT(HtmlParser, tester);
 
+//commnent event handler, used to skip the comment
 class CommentHandler : public EventHandler
 {
 public:
@@ -40,6 +41,7 @@ public:
     }
 };
 
+//title evnent handler, used to process the <title tag
 class TitleHandler : public EventHandler
 {
 public:
