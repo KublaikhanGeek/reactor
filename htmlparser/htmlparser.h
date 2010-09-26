@@ -40,6 +40,14 @@ private:
     std::string m_tag;
 };
 
+#ifndef STRNCASECMP
+#ifdef _WIN32
+#define STRNCASECMP _strnicmp
+#else
+#define STRNCASECMP strncasecmp
+#endif
+#endif
+
 class HtmlParser
 {
 private:
@@ -105,24 +113,23 @@ public:
                 continue;
             }
 
-            const char * pos = strchr(cur_pos, ' ');
-            if (NULL != pos)
+            iter = m_handler_table.begin();
+            bool ret = false;
+            while (iter != m_handler_table.end())
             {
-                //meets a tag
-                std::string tag(cur_pos, pos - cur_pos);
-                AllToLower(tag);
-                iter = m_handler_table.find(tag);
-                if (iter != m_handler_table.end())
+                if (!STRNCASECMP(iter->first.c_str(),
+                    cur_pos, iter->first.size()))
                 {
-                    if (iter->second->OnEvent(m_begin_pos, 
-                                m_len, cur_pos))
-                    {
-                        continue;
-                    }
+                    ret = iter->second->OnEvent(
+                        m_begin_pos, m_len, cur_pos);
+                    break;
                 }
+                ++ iter;
             }
-
-            ++ cur_pos;
+            if (!ret)
+            {
+                ++ cur_pos;
+            }
         }
     }
 
