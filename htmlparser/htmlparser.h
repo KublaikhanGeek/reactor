@@ -4,7 +4,7 @@
 /// @file    htmlparser.h
 /// @brief   a SAX html parser framework
 /// @author  Wu Zesheng <wuzesheng@wuzesheng.com>
-/// @since   2010-09-21
+/// @date    2010-09-21
 /// @version 1.0.0
 
 #include <map>
@@ -73,12 +73,16 @@ private:
 
 public:
 
+	/// @brief  constructor
+	/// @param begin_pos [in] the page's begin pointer
+	/// @param len [in] the page length
     HtmlParser(const char * begin_pos = NULL, size_t len = 0) :
         m_begin_pos(begin_pos),
         m_len(len)
     {
     }
 
+	/// @brief  destructor
     ~HtmlParser()
     {
         HandlerTable::iterator it = m_handler_table.begin();
@@ -105,26 +109,34 @@ public:
 
     /// @brief register an event handler to the parser
 	/// @param handler [in] the handler to be registered
-    void RegisterHandler(EventHandler * handler)
+    void RegisterHandler(const EventHandler * handler)
     {
-        m_handler_table[handler->GetTag()] = handler;
+        HandlerTable::iterator it = m_handler_table.find(handler->GetTag());
+		if (it != m_handler_table.end())
+		{
+			delete it->second;
+		}
+        it->second = handler;
     }
 
     /// @brief unregister an event handler from the parser
 	/// @param handler [in] the handler to be unregistered
-    void UnregisterHandler(EventHandler * handler)
+    void UnregisterHandler(const EventHandler * handler)
     {
         HandlerTable::iterator it = m_handler_table.find(handler->GetTag());
         if (it != m_handler_table.end())
         {
-            delete it->second;
+			if (it->second->IsNeedDelete())
+			{
+				delete it->second;
+			}
             m_handler_table.erase(it);
         }
     }
 
     /// @brief parse the page
-	/// the user should call this function after register 
-	/// your EventHandlers to drive the paser
+	/// @note  the user should call this function after register 
+	///        your EventHandlers to drive the parser
     void Parse()
     {
         const char * cur_pos = m_begin_pos;
