@@ -34,11 +34,11 @@ function login()
 	local url="http://$host/member.php?mod=logging&action=login&loginsubmit=yes&infloat=yes&inajax=1" 
 	local data="fastloginfield=username&username=$user&cookietime=2592000&password=$passwd&quickforward=yes&handlekey=ls&questionid=0&answer=" 
 	wget $url -d \
-			  --save-cookies=$cookie_file \
-			  --user-agent="$user_agent" \
-			  --post-data="$data" \
-			  -O $page \
-			  -a $header 2>/dev/null
+              --save-cookies=$cookie_file \
+              --user-agent="$user_agent" \
+              --post-data="$data" \
+              -O $page \
+              -a $header 2>/dev/null
 }
 
 #从登录后的页面中获取formhash
@@ -56,11 +56,11 @@ function goto_board()
 	local fid=$1
 	local url="http://$host/forum.php?mod=forumdisplay&fid=$fid"
 	wget $url -d \
-			  --load-cookies=$cookie_file \
-			  --user-agent="$user_agent" \
-			  --save-cookies=$cookie_file \
-			  -O $page \
-			  -a $header 2>/dev/null
+              --load-cookies=$cookie_file \
+              --user-agent="$user_agent" \
+              --save-cookies=$cookie_file \
+              -O $page \
+              -a $header 2>/dev/null
 }
 
 #发新帖
@@ -76,12 +76,12 @@ function post()
 	local url="http://$host/forum.php?mod=post&action=newthread&fid=$fid&topicsubmit=yes&infloat=yes&handlekey=fastnewpost&inajax=1"
 	local data="subject=$subject&message=$message&formhash=$formhash&usesig=1"
 	wget $url -d \
-			  --load-cookie=$cookie_file \
-			  --user-agent="$user_agent" \
-			  --referer="$referer" \
-			  --post-data="$data" \
-			  -O $page \
-			  -a $header 2>/dev/null
+              --load-cookie=$cookie_file \
+              --user-agent="$user_agent" \
+              --referer="$referer" \
+              --post-data="$data" \
+              -O $page \
+              -a $header 2>/dev/null
 }
 
 function clear()
