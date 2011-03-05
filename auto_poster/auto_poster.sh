@@ -13,22 +13,22 @@ then
 	exit 1
 fi
 
-#传入参数
+#arguments
 g_fid=$1
 g_subject=`echo "$2" | iconv -fgb2312 -tutf8`
 g_message=`echo "$3" | iconv -fgb2312 -tutf8`
 
-#站点信息
+#site info
 host=bbs.sosospider.com
-user=webspider
-passwd=Crawler007
+user=zeshengwu
+passwd=zeshengwu
 
 page=".page" 
 header=".header"
 cookie_file=".cookie"
 user_agent="Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-CN; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
 
-#登录discuz论坛
+#login discuz bbs
 function login()
 {
 	local url="http://$host/member.php?mod=logging&action=login&loginsubmit=yes&infloat=yes&inajax=1" 
@@ -41,7 +41,7 @@ function login()
               -a $header 2>/dev/null
 }
 
-#从登录后的页面中获取formhash
+#get formhash from "$page"
 function get_formhash()
 {
 	formhash=`grep -Eio "formhash=.*" $page \
@@ -50,7 +50,7 @@ function get_formhash()
 	echo -n "$formhash"
 }
 
-#进入版块
+#goto specified board
 function goto_board()
 {
 	local fid=$1
@@ -63,7 +63,7 @@ function goto_board()
               -a $header 2>/dev/null
 }
 
-#发新帖
+#post a new post
 function post()
 {
 	local fid=$1
@@ -84,6 +84,7 @@ function post()
               -a $header 2>/dev/null
 }
 
+#clear temporary files
 function clear()
 {
 	rm $page && rm $header && rm $cookie_file
