@@ -6,6 +6,7 @@
 #include <Winsock2.h>
 #elif defined(__linux__)
 #include <stdint.h>
+#include <unistd.h>
 #include <sys/epoll.h>
 #endif
 

@@ -1,3 +1,5 @@
+#include <errno.h>
+#include <assert.h>
 #include <vector>
 #include "event_demultiplexer.h"
 
@@ -112,7 +114,7 @@ void SelectDemultiplexer::Clear()
 /// 构造函数
 EpollDemultiplexer::EpollDemultiplexer()
 {
-	m_epoll_fd = epoll_create(FD_SETSIZE);
+	m_epoll_fd = ::epoll_create(FD_SETSIZE);
 	assert(m_epoll_fd != -1);
 	m_fd_num = 0;
 }
@@ -120,7 +122,7 @@ EpollDemultiplexer::EpollDemultiplexer()
 /// 析构函数
 EpollDemultiplexer::~EpollDemultiplexer()
 {
-	close(m_epoll_fd);
+	::close(m_epoll_fd);
 }
 
 /// 获取有事件发生的所有句柄以及所发生的事件
@@ -146,11 +148,11 @@ int EpollDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
 			}
 			else
 			{
-				if (ep_evts[idx] & EPOLLIN)
+				if (ep_evts[idx].events & EPOLLIN)
 				{
 					evt |= kReadEvent;
 				}
-				if (ep_evts[idx] & EPOLLOUT)
+				if (ep_evts[idx].events & EPOLLOUT)
 				{
 					evt |= kWriteEvent;
 				}
@@ -177,7 +179,7 @@ int EpollDemultiplexer::RequestEvent(handle_t handle, event_t evt)
 	}
 	ep_evt.events |= EPOLLONESHOT;
 
-	if (epoll_ctl(m_epoll_fd, EPOLL_CTL_MOD, handle, &events) != 0)
+	if (epoll_ctl(m_epoll_fd, EPOLL_CTL_MOD, handle, &ep_evt) != 0)
 	{
 		if (errno == ENOENT)
 		{
