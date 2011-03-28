@@ -37,7 +37,7 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-
+#if defined(_WIN32)
 /// 由select实现的多路事件分发器
 class SelectDemultiplexer : public EventDemultiplexer
 {
@@ -80,7 +80,7 @@ private:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-
+#elif defined(__linux__)
 /// 由epoll实现的多路事件分发器
 class EpollDemultiplexer : public EventDemultiplexer
 {
@@ -105,6 +105,9 @@ public:
     /// @retval < 0 撤销出错
     virtual int UnrequestEvent(handle_t handle, event_t evt);
 };
+#else
+#error "目前不支持该平台"
+#endif
 } // namespace reactor
 
 #endif // REACTOR_EVENT_DEMULTIPLEXER_H_
