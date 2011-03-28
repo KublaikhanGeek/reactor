@@ -4,11 +4,11 @@
 #include "reactor.h"
 
 /// @file   time_server.cc
-/// @brief 
+/// @brief  
 /// @author zeshengwu<wuzesheng@vip.qq.com>
 /// @date   2011-03-28
 
-class TimeServer
+class TimeServer : public reactor::EventHandler
 {
 public:
 };
