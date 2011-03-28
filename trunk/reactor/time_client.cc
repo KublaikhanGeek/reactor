@@ -1,0 +1,4 @@
+#ifndef REACTOR_TIME_CLIENT_H_
+#define REACTOR_TIME_CLIENT_H_
+
+#endif // REACTOR_TIME_CLIENT_H_
