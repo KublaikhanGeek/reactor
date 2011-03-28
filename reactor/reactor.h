@@ -1,12 +1,12 @@
 #ifndef REACTOR_REACTOR_H_
 #define REACTOR_REACTOR_H_
 
+#define FD_SETSIZE 8192
 #ifdef _WIN32
-#define FD_SETSIZE 2048
 #include <Winsock2.h>
 #elif defined(__linux__)
 #include <stdint.h>
-#include <epoll.h>
+#include <sys/epoll.h>
 #endif
 
 /// @file   reactor.h

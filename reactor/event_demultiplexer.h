@@ -16,6 +16,9 @@ class EventDemultiplexer
 {
 public:
 
+	/// 析构函数
+	virtual ~EventDemultiplexer() {}
+
     /// 获取有事件发生的所有句柄以及所发生的事件
     /// @param  events  获取的事件
     /// @param  timeout 超时时间
@@ -37,7 +40,7 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-#if defined(_WIN32)
+
 /// 由select实现的多路事件分发器
 class SelectDemultiplexer : public EventDemultiplexer
 {
@@ -80,11 +83,17 @@ private:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-#elif defined(__linux__)
+
 /// 由epoll实现的多路事件分发器
 class EpollDemultiplexer : public EventDemultiplexer
 {
 public:
+
+	/// 构造函数
+	EpollDemultiplexer();
+
+	/// 析构函数
+	~EpollDemultiplexer();
 
     /// 获取有事件发生的所有句柄以及所发生的事件
     /// @param  events  获取的事件
@@ -104,10 +113,12 @@ public:
     /// @retval = 0 撤销成功
     /// @retval < 0 撤销出错
     virtual int UnrequestEvent(handle_t handle, event_t evt);
+
+private:
+
+	int  m_epoll_fd; ///< epoll自身的fd
+	int  m_fd_num;   ///< 所有fd的个数
 };
-#else
-#error "目前不支持该平台"
-#endif
 } // namespace reactor
 
 #endif // REACTOR_EVENT_DEMULTIPLEXER_H_

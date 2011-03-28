@@ -1,3 +1,4 @@
+#include <vector>
 #include "event_demultiplexer.h"
 
 namespace reactor
@@ -108,6 +109,20 @@ void SelectDemultiplexer::Clear()
     m_fd_set.clear();
 }
 #elif defined(__linux__)
+/// 构造函数
+EpollDemultiplexer::EpollDemultiplexer()
+{
+	m_epoll_fd = epoll_create(FD_SETSIZE);
+	assert(m_epoll_fd != -1);
+	m_fd_num = 0;
+}
+
+/// 析构函数
+EpollDemultiplexer::~EpollDemultiplexer()
+{
+	close(m_epoll_fd);
+}
+
 /// 获取有事件发生的所有句柄以及所发生的事件
 /// @param  events  获取的事件
 /// @param  timeout 超时时间
@@ -117,7 +132,33 @@ void SelectDemultiplexer::Clear()
 int EpollDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
                                    int timeout)
 {
-    return 0;
+	std::vector<epoll_event> ep_evts(m_fd_num);
+	int num = epoll_wait(m_epoll_fd, &ep_evts[0], ep_evts.size(), timeout);
+	if (num > 0)
+	{
+		for (int idx = 0; idx < num; ++idx)
+		{
+			event_t evt;
+			if ((ep_evts[idx].events & EPOLLERR) ||
+					(ep_evts[idx].events & EPOLLHUP))
+			{
+				evt |= kErrorEvent;
+			}
+			else
+			{
+				if (ep_evts[idx] & EPOLLIN)
+				{
+					evt |= kReadEvent;
+				}
+				if (ep_evts[idx] & EPOLLOUT)
+				{
+					evt |= kWriteEvent;
+				}
+			}
+			events->insert(std::make_pair(ep_evts[idx].data.fd, evt));
+		}
+	}
+    return num;
 }
 
 /// 设置句柄handle关注evt事件
@@ -125,6 +166,28 @@ int EpollDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
 /// @retval < 0 设置出错
 int EpollDemultiplexer::RequestEvent(handle_t handle, event_t evt)
 {
+	epoll_event ep_evt;
+	if (evt & kReadEvent)
+	{
+		ep_evt.events |= EPOLLIN;
+	}
+	if (evt & kWriteEvent)
+	{
+		ep_evt.events |= EPOLLOUT;
+	}
+	ep_evt.events |= EPOLLONESHOT;
+
+	if (epoll_ctl(m_epoll_fd, EPOLL_CTL_MOD, handle, &events) != 0)
+	{
+		if (errno == ENOENT)
+		{
+			if (epoll_ctl(m_epoll_fd, EPOLL_CTL_ADD, handle, &ep_evt) != 0)
+			{
+				return -errno;
+			}
+			++m_fd_num;
+		}
+	}
     return 0;
 }
 
@@ -133,7 +196,18 @@ int EpollDemultiplexer::RequestEvent(handle_t handle, event_t evt)
 /// @retval < 0 撤销出错
 int EpollDemultiplexer::UnrequestEvent(handle_t handle, event_t evt)
 {
-    return 0;
+	if ((evt ^ kEventMask) == 0)
+	{
+		epoll_event ep_evt;
+		if (epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, handle, &ep_evt) != 0)
+		{
+			return -errno;
+		}
+		--m_fd_num;
+		return 0;
+	}
+	assert(0);
+	return -0xffff; /// fatal error
 }
 #else
 #error "目前还不支持该平台"
