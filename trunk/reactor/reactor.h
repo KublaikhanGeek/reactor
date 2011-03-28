@@ -42,7 +42,7 @@ class EventHandler
 public:
 
     /// 获取该handler所对应的句柄
-    virtual handle_t GetHandle() = 0;
+    virtual handle_t GetHandle() const = 0;
 
     /// 处理读事件的回调函数
     virtual void HandleRead() {}
