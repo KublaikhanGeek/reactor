@@ -91,7 +91,7 @@ ReactorImplementation::ReactorImplementation()
 #if defined(_WIN32)
     m_demultiplexer = new SelectDemultiplexer();
 #elif defined(__linux__)
-    m_demultiplexer = new EpollDemutilplexer();
+    m_demultiplexer = new EpollDemultiplexer();
 #else
 #error "目前还不支持该平台"
 #endif // _WIN32
