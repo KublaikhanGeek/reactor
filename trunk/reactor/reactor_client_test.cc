@@ -33,14 +33,14 @@ public:
 	TimeClient() :
 		EventHandler(false)
 	{
-		m_handle = ::socket(AF_INET, SOCK_STREAM, 0);
+		m_handle = socket(AF_INET, SOCK_STREAM, 0);
 		assert(m_handle >= 0);
 	}
 
 	/// 析构函数
 	~TimeClient()
 	{
-		::close(m_handle);
+		close(m_handle);
 	}
 
 	/// 连接服务器
@@ -50,7 +50,7 @@ public:
 		addr.sin_family = AF_INET;
 		addr.sin_port = htons(port);
 		addr.sin_addr.s_addr = inet_addr(ip);
-		if (::connect(m_handle, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+		if (connect(m_handle, (struct sockaddr *)&addr, sizeof(addr)) < 0)
 		{
 			fprintf(stderr, "connect error:%s\n", strerror(errno));
 			return false;
@@ -67,8 +67,8 @@ public:
 	/// 处理从server收到的应答
     virtual void HandleRead()
 	{
-		::memset(g_read_buffer, 0, kBufferSize);
-		int len = ::recv(m_handle, g_read_buffer, kBufferSize, 0);
+		memset(g_read_buffer, 0, kBufferSize);
+		int len = recv(m_handle, g_read_buffer, kBufferSize, 0);
 		if (len > 0)
 		{
 			fprintf(stderr, "%s", g_read_buffer);
@@ -83,9 +83,9 @@ public:
 	/// 向server发请求
     virtual void HandleWrite()
 	{
-		::memset(g_write_buffer, 0, kBufferSize);
+		memset(g_write_buffer, 0, kBufferSize);
 		int len = sprintf(g_write_buffer, "time\r\n");
-		len = ::send(m_handle, g_write_buffer, len, 0);
+		len = send(m_handle, g_write_buffer, len, 0);
 		if (len > 0)
 		{
 			fprintf(stderr, "%s", g_write_buffer);
@@ -101,7 +101,7 @@ public:
 	virtual void HandleError()
 	{
 		fprintf(stderr, "server closed\n");
-		::close(m_handle);
+		close(m_handle);
 		exit(0);
 	}
 

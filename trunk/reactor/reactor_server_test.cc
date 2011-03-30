@@ -45,9 +45,9 @@ public:
 	/// 向客户端回应答
 	virtual void HandleWrite()
 	{
-		::memset(g_write_buffer, 0, sizeof(g_write_buffer));
+		memset(g_write_buffer, 0, sizeof(g_write_buffer));
 		int len = sprintf(g_write_buffer, "current time: %d\r\n", (int)time(NULL));
-		len = ::send(m_handle, g_write_buffer, len, 0);
+		len = send(m_handle, g_write_buffer, len, 0);
 		if (len > 0)
 		{
 			fprintf(stderr, "send response to client, fd=%d\n", (int)m_handle);
@@ -62,23 +62,23 @@ public:
 	/// 读客户端发过来的数据
 	virtual void HandleRead()
 	{
-		::memset(g_read_buffer, 0, sizeof(g_read_buffer));
-		int len = ::recv(m_handle, g_read_buffer, kBufferSize, 0);
+		memset(g_read_buffer, 0, sizeof(g_read_buffer));
+		int len = recv(m_handle, g_read_buffer, kBufferSize, 0);
 		if (len > 0)
 		{
-			if (::strncasecmp("time", g_read_buffer, 4) == 0)
+			if (strncasecmp("time", g_read_buffer, 4) == 0)
 			{
 				g_reactor.RegisterHandler(this, reactor::kWriteEvent);
 			}
-			else if (::strncasecmp("exit", g_read_buffer, 4) == 0)
+			else if (strncasecmp("exit", g_read_buffer, 4) == 0)
 			{
-				::close(m_handle);
+				close(m_handle);
 				g_reactor.RemoveHandler(this);
 			}
 			else
 			{
 				fprintf(stderr, "Invalid request: %s", g_read_buffer);
-				::close(m_handle);
+				close(m_handle);
 				g_reactor.RemoveHandler(this);
 			}
 		}
@@ -91,7 +91,7 @@ public:
 	virtual void HandleError()
 	{
 		fprintf(stderr, "client %d closed\n", m_handle);
-		::close(m_handle);
+		close(m_handle);
 		g_reactor.RemoveHandler(this);
 	}
 
@@ -115,7 +115,7 @@ public:
 	bool Start()
 	{
 		/// 初始化handle
-		m_handle = ::socket(AF_INET, SOCK_STREAM, 0);
+		m_handle = socket(AF_INET, SOCK_STREAM, 0);
 		if (m_handle < 0)
 		{
 			fprintf(stderr, "error: %s\n", strerror(errno));
@@ -127,14 +127,14 @@ public:
 		addr.sin_family = AF_INET;
 		addr.sin_port = htons(m_port);
 		addr.sin_addr.s_addr = inet_addr(m_ip.c_str());
-		if (::bind(m_handle, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+		if (bind(m_handle, (struct sockaddr *)&addr, sizeof(addr)) < 0)
 		{
 			fprintf(stderr, "error: %s\n", strerror(errno));
 			return false;
 		}
 
 		/// 监听
-		if (::listen(m_handle, 10) < 0)
+		if (listen(m_handle, 10) < 0)
 		{
 			fprintf(stderr, "error: %s\n", strerror(errno));
 			return false;
@@ -153,10 +153,10 @@ public:
     {
 		struct sockaddr addr;
 		socklen_t addrlen = 0;
-		reactor::handle_t handle = ::accept(m_handle, &addr, &addrlen);
+		reactor::handle_t handle = accept(m_handle, &addr, &addrlen);
 		if (handle < 0)
 		{
-			fprintf(stderr, "error: %s\n", ::strerror(errno));
+			fprintf(stderr, "error: %s\n", strerror(errno));
 		}
 		else
 		{
