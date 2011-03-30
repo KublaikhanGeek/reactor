@@ -41,11 +41,6 @@ class EventHandler
 {
 public:
 
-	/// 构造函数
-	EventHandler(bool is_own_memory = false) :
-		m_is_reactor_own_memory(is_own_memory)
-	{}
-
     /// 获取该handler所对应的句柄
     virtual handle_t GetHandle() const = 0;
 
@@ -65,10 +60,6 @@ protected:
 
     /// 析构函数,只能子类调
     virtual ~EventHandler() {}
-
-protected:
-
-	bool m_is_reactor_own_memory; ///< reactor是否持有handler的内存
 };
 
 /// reactor的实现类
