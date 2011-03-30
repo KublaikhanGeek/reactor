@@ -73,7 +73,7 @@ public:
 			}
 			else
 			{
-				fprintf(stderr, "Invalid request: %s\n", g_read_buffer);
+				fprintf(stderr, "Invalid request: %s", g_read_buffer);
 				::close(m_handle);
 				g_reactor.RemoveHandler(this);
 			}
