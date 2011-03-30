@@ -151,13 +151,13 @@ void ReactorImplementation::HandleEvents(int timeout)
             }
             else ///< ¿É¶Á || ¿ÉÐ´
             {
-                if (it->second & kWriteEvent)
-                {
-                    handler->HandleWrite();
-                }
                 if (it->second & kReadEvent)
                 {
                     handler->HandleRead();
+                }
+                if (it->second & kWriteEvent)
+                {
+                    handler->HandleWrite();
                 }
             }
             ++it;
