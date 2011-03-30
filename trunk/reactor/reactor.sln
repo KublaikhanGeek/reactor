@@ -4,8 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libreactor", "reactor.vcproj", "{2044CF0C-66B3-4B21-BF9E-93AA2A77C92F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server.vcproj", "{72688AB7-4A83-402A-97C7-204D7F1A1750}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2044CF0C-66B3-4B21-BF9E-93AA2A77C92F} = {2044CF0C-66B3-4B21-BF9E-93AA2A77C92F}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client", "client.vcproj", "{C4C636BE-D8EA-4E31-8963-83609AD2C3C9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2044CF0C-66B3-4B21-BF9E-93AA2A77C92F} = {2044CF0C-66B3-4B21-BF9E-93AA2A77C92F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
