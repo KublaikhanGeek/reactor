@@ -13,8 +13,8 @@
 #include <string>
 #include "reactor.h"
 
-/// @file   time_server.cc
-/// @brief  用reactor实现的时间server,内部用telnet协议
+/// @file   reactor_server_test.cc
+/// @brief  用reactor实现的时间server,用telnet协议
 /// @author zeshengwu<wuzesheng@vip.qq.com>
 /// @date   2011-03-28
 
@@ -46,13 +46,12 @@ public:
 	virtual void HandleWrite()
 	{
 		::memset(g_write_buffer, 0, sizeof(g_write_buffer));
-		int len = sprintf(g_write_buffer, "current time: %d\n", (int)time(NULL));
+		int len = sprintf(g_write_buffer, "current time: %d\r\n", (int)time(NULL));
 		len = ::send(m_handle, g_write_buffer, len, 0);
 		if (len > 0)
 		{
 			fprintf(stderr, "send response to client, fd=%d\n", (int)m_handle);
-			::close(m_handle);
-			g_reactor.RemoveHandler(this);
+			g_reactor.RegisterHandler(this, reactor::kReadEvent);
 		}
 		else
 		{
@@ -67,9 +66,14 @@ public:
 		int len = ::recv(m_handle, g_read_buffer, kBufferSize, 0);
 		if (len > 0)
 		{
-			if (::strncasecmp("gettime", g_read_buffer, 4) == 0)
+			if (::strncasecmp("time", g_read_buffer, 4) == 0)
 			{
 				g_reactor.RegisterHandler(this, reactor::kWriteEvent);
+			}
+			else if (::strncasecmp("exit", g_read_buffer, 4) == 0)
+			{
+				::close(m_handle);
+				g_reactor.RemoveHandler(this);
 			}
 			else
 			{
@@ -82,6 +86,13 @@ public:
 		{
 			assert(0);
 		}
+	}
+
+	virtual void HandleError()
+	{
+		fprintf(stderr, "client %d closed\n", m_handle);
+		::close(m_handle);
+		g_reactor.RemoveHandler(this);
 	}
 
 private:
@@ -179,7 +190,6 @@ int main(int argc, char ** argv)
 		fprintf(stderr, "start server failed\n");
 		return EXIT_FAILURE;
 	}
-	//printf("server started\n");
 	fprintf(stderr, "server started!\n");
 
 	while (1)
