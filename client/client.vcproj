@@ -166,10 +166,6 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath="..\reactor\reactor_client_test.cc"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
