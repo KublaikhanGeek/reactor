@@ -32,7 +32,7 @@ public:
 
 	/// 构造函数
 	RequestHandler(reactor::handle_t handle) :
-		EventHandler(true),
+		EventHandler(),
 		m_handle(handle)
 	{}
 
@@ -74,12 +74,14 @@ public:
 			{
 				close(m_handle);
 				g_reactor.RemoveHandler(this);
+                delete this;
 			}
 			else
 			{
 				fprintf(stderr, "Invalid request: %s", g_read_buffer);
 				close(m_handle);
 				g_reactor.RemoveHandler(this);
+                delete this;
 			}
 		}
 		else
@@ -93,6 +95,7 @@ public:
 		fprintf(stderr, "client %d closed\n", m_handle);
 		close(m_handle);
 		g_reactor.RemoveHandler(this);
+        delete this;
 	}
 
 private:
@@ -106,7 +109,7 @@ public:
 
 	/// 构造函数
 	TimeServer(const char * ip, unsigned short port) :
-		EventHandler(false),
+		EventHandler(),
 		m_ip(ip),
 		m_port(port)
 	{}

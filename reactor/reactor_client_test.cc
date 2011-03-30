@@ -31,7 +31,7 @@ public:
 
 	/// ¹¹Ôìº¯Êý
 	TimeClient() :
-		EventHandler(false)
+		EventHandler()
 	{
 		m_handle = socket(AF_INET, SOCK_STREAM, 0);
 		assert(m_handle >= 0);
