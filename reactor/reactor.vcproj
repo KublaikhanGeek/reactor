@@ -171,15 +171,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\reactor_test.cc"
+				RelativePath=".\Makefile"
 				>
 			</File>
 			<File
-				RelativePath=".\time_client.cc"
+				RelativePath=".\reactor_client_test.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\time_server.cc"
+				RelativePath=".\reactor_server_test.cc"
 				>
 			</File>
 		</Filter>
