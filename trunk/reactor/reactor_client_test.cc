@@ -84,7 +84,7 @@ public:
     virtual void HandleWrite()
 	{
 		::memset(g_write_buffer, 0, kBufferSize);
-		int len = sprintf(g_write_buffer, "gettime\r\n");
+		int len = sprintf(g_write_buffer, "time\r\n");
 		len = ::send(m_handle, g_write_buffer, len, 0);
 		if (len > 0)
 		{
@@ -129,6 +129,7 @@ int main(int argc, char ** argv)
 	while (1)
 	{
 		g_reactor.HandleEvents(100);
+		sleep(1);
 	}
 	g_reactor.RemoveHandler(&client);
 }
