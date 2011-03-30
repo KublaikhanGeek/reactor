@@ -7,9 +7,11 @@
 #include <time.h>
 #include <assert.h>
 #include <errno.h>
+#ifdef __linux__
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#endif
 #include <string>
 #include "reactor.h"
 
@@ -25,6 +27,12 @@ reactor::Reactor g_reactor;
 const size_t kBufferSize = 1024;
 char g_read_buffer[kBufferSize];
 char g_write_buffer[kBufferSize];
+
+#ifdef _WIN32
+#define close(handle) closesocket(handle)
+#define strncasecmp   _strnicmp
+#pragma warning(disable: 4996)
+#endif
 
 class RequestHandler : public reactor::EventHandler
 {
@@ -117,6 +125,15 @@ public:
     /// 启动server,开始工作
     bool Start()
     {
+#ifdef _WIN32
+        WSADATA wsa_data;
+        if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
+        {
+            fprintf(stderr, "WSAStartup() error:%s\n",
+                strerror(WSAGetLastError()));
+            return false;
+        }
+#endif
         /// 初始化handle
         m_handle = socket(AF_INET, SOCK_STREAM, 0);
         if (m_handle < 0)
@@ -155,7 +172,7 @@ public:
     virtual void HandleRead()
     {
         struct sockaddr addr;
-        socklen_t addrlen = 0;
+        int addrlen = 0;
         reactor::handle_t handle = accept(m_handle, &addr, &addrlen);
         if (handle < 0)
         {
@@ -200,6 +217,9 @@ int main(int argc, char ** argv)
         g_reactor.RegisterHandler(&server, reactor::kReadEvent);
         g_reactor.HandleEvents(100);
     }
+#ifdef _WIN32
+    WSACleanup();
+#endif
     return EXIT_SUCCESS;
 }
 

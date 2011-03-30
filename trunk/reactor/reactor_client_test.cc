@@ -7,9 +7,11 @@
 #include <time.h>
 #include <assert.h>
 #include <errno.h>
+#ifdef __linux__
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#endif
 #include "reactor.h"
 
 /// @file   reactor_client_test.cc
@@ -25,6 +27,11 @@ const size_t kBufferSize = 1024;
 char g_read_buffer[kBufferSize];
 char g_write_buffer[kBufferSize];
 
+#ifdef _WIN32
+#define close(handle) closesocket(handle)
+#pragma warning(disable: 4996)
+#endif
+
 class TimeClient : public reactor::EventHandler
 {
 public:
@@ -33,6 +40,15 @@ public:
     TimeClient() :
         EventHandler()
     {
+#ifdef _WIN32
+        WSADATA wsa_data;
+        if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
+        {
+            fprintf(stderr, "WSAStartup() error:%s\n",
+                strerror(WSAGetLastError()));
+            assert(0);
+        }
+#endif
         m_handle = socket(AF_INET, SOCK_STREAM, 0);
         assert(m_handle >= 0);
     }
@@ -129,9 +145,17 @@ int main(int argc, char ** argv)
     while (1)
     {
         g_reactor.HandleEvents(100);
+#if defined(_WIN32)
+        Sleep(1000);
+#elif defined(__linux__)
         sleep(1);
+#endif
     }
     g_reactor.RemoveHandler(&client);
+#ifdef _WIN32
+    WSACleanup();
+#endif
+    return EXIT_SUCCESS;
 }
 
 #endif // REACTOR_TIME_CLIENT_H_
