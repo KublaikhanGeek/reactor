@@ -60,6 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libreactor.a"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
