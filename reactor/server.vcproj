@@ -170,6 +170,10 @@
 			RelativePath=".\reactor_server_test.cc"
 			>
 		</File>
+		<File
+			RelativePath=".\test_common.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

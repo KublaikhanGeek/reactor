@@ -13,7 +13,7 @@
 #include <arpa/inet.h>
 #endif
 #include <string>
-#include "reactor.h"
+#include "test_common.h"
 
 /// @file   reactor_server_test.cc
 /// @brief  用reactor实现的时间server,用telnet协议
@@ -27,12 +27,6 @@ reactor::Reactor g_reactor;
 const size_t kBufferSize = 1024;
 char g_read_buffer[kBufferSize];
 char g_write_buffer[kBufferSize];
-
-#ifdef _WIN32
-#define close(handle) closesocket(handle)
-#define strncasecmp   _strnicmp
-#pragma warning(disable: 4996)
-#endif
 
 class RequestHandler : public reactor::EventHandler
 {
@@ -63,7 +57,7 @@ public:
         }
         else
         {
-            assert(0);
+            ReportSocketError("send");
         }
     }
 
@@ -94,7 +88,7 @@ public:
         }
         else
         {
-            assert(0);
+            ReportSocketError("recv");
         }
     }
 
@@ -136,9 +130,9 @@ public:
 #endif
         /// 初始化handle
         m_handle = socket(AF_INET, SOCK_STREAM, 0);
-        if (m_handle < 0)
+        if (!IsValidHandle(m_handle))
         {
-            fprintf(stderr, "error: %s\n", strerror(errno));
+            ReportSocketError("socket");
             return false;
         }
 
@@ -149,14 +143,14 @@ public:
         addr.sin_addr.s_addr = inet_addr(m_ip.c_str());
         if (bind(m_handle, (struct sockaddr *)&addr, sizeof(addr)) < 0)
         {
-            fprintf(stderr, "error: %s\n", strerror(errno));
+            ReportSocketError("bind");
             return false;
         }
 
         /// 监听
         if (listen(m_handle, 10) < 0)
         {
-            fprintf(stderr, "error: %s\n", strerror(errno));
+            ReportSocketError("listen");
             return false;
         }
         return true;
@@ -172,11 +166,11 @@ public:
     virtual void HandleRead()
     {
         struct sockaddr addr;
-        int addrlen = 0;
+        int addrlen = sizeof(addr);
         reactor::handle_t handle = accept(m_handle, &addr, &addrlen);
-        if (handle < 0)
+        if (!IsValidHandle(handle))
         {
-            fprintf(stderr, "error: %s\n", strerror(errno));
+            ReportSocketError("accept");
         }
         else
         {
