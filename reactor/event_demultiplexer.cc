@@ -169,6 +169,9 @@ int EpollDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
 int EpollDemultiplexer::RequestEvent(handle_t handle, event_t evt)
 {
 	epoll_event ep_evt;
+	ep_evt.data.fd = handle;
+	ep_evt.events = 0;
+
 	if (evt & kReadEvent)
 	{
 		ep_evt.events |= EPOLLIN;
