@@ -43,7 +43,7 @@ public:
 
 	/// 构造函数
 	EventHandler(bool is_own_memory = false) :
-		m_is_own_memory(is_own_memory)
+		m_is_reactor_own_memory(is_own_memory)
 	{}
 
     /// 获取该handler所对应的句柄
@@ -68,7 +68,7 @@ protected:
 
 protected:
 
-	bool m_is_own_memory; ///< reactor是否持有handler的内存
+	bool m_is_reactor_own_memory; ///< reactor是否持有handler的内存
 };
 
 /// reactor的实现类
