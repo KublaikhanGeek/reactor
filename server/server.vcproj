@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="reactor"
-	ProjectGUID="{2044CF0C-66B3-4B21-BF9E-93AA2A77C92F}"
-	RootNamespace="reactor"
+	Name="server"
+	ProjectGUID="{49F231EE-B59A-4DA5-AF0F-532CA23EF89C}"
+	RootNamespace="server"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -165,38 +165,10 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="proj"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+		<File
+			RelativePath="..\reactor\reactor_server_test.cc"
 			>
-			<File
-				RelativePath=".\Makefile"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="src"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
-			<File
-				RelativePath=".\event_demultiplexer.cc"
-				>
-			</File>
-			<File
-				RelativePath=".\event_demultiplexer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\reactor.cc"
-				>
-			</File>
-			<File
-				RelativePath=".\reactor.h"
-				>
-			</File>
-		</Filter>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
