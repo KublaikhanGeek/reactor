@@ -182,9 +182,9 @@ int main(int argc, char ** argv)
 	//printf("server started\n");
 	fprintf(stderr, "server started!\n");
 
-	g_reactor.RegisterHandler(&server, reactor::kReadEvent);
 	while (1)
 	{
+		g_reactor.RegisterHandler(&server, reactor::kReadEvent);
 		g_reactor.HandleEvents(100);
 	}
 	return EXIT_SUCCESS;
