@@ -27,6 +27,10 @@ int SelectDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
     m_timeout.tv_usec = timeout % 1000 * 1000;
     int ret = select(FD_SETSIZE, &m_read_set, &m_write_set,
                      &m_except_set, &m_timeout);
+    if (ret <= 0)
+    {
+        return ret;
+    }
     ///转化select的结果
     std::set<handle_t>::iterator it = m_fd_set.begin();
     while (it != m_fd_set.end())
@@ -51,6 +55,7 @@ int SelectDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
         {
             events->insert(std::make_pair(*it, evt));
         }
+        ++it;
     }
     return ret;
 }

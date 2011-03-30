@@ -12,7 +12,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #endif
-#include "reactor.h"
+#include "test_common.h"
 
 /// @file   reactor_client_test.cc
 /// @brief  用reactor实现的客户端,用telnet协议
@@ -26,11 +26,6 @@ reactor::Reactor g_reactor;
 const size_t kBufferSize = 1024;
 char g_read_buffer[kBufferSize];
 char g_write_buffer[kBufferSize];
-
-#ifdef _WIN32
-#define close(handle) closesocket(handle)
-#pragma warning(disable: 4996)
-#endif
 
 class TimeClient : public reactor::EventHandler
 {
@@ -50,7 +45,7 @@ public:
         }
 #endif
         m_handle = socket(AF_INET, SOCK_STREAM, 0);
-        assert(m_handle >= 0);
+        assert(IsValidHandle(m_handle));
     }
 
     /// 析构函数
@@ -68,7 +63,7 @@ public:
         addr.sin_addr.s_addr = inet_addr(ip);
         if (connect(m_handle, (struct sockaddr *)&addr, sizeof(addr)) < 0)
         {
-            fprintf(stderr, "connect error:%s\n", strerror(errno));
+            ReportSocketError("connect");
             return false;
         }
         return true;
@@ -92,7 +87,7 @@ public:
         }
         else
         {
-            fprintf(stderr, "recv error: %s\n", strerror(errno));
+            ReportSocketError("recv");
         }
     }
 
@@ -109,7 +104,7 @@ public:
         }
         else
         {
-            fprintf(stderr, "send error: %s\n", strerror(errno));
+            ReportSocketError("send");
         }
     }
 
