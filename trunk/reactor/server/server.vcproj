@@ -3,10 +3,9 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="server"
-	ProjectGUID="{49F231EE-B59A-4DA5-AF0F-532CA23EF89C}"
+	ProjectGUID="{72688AB7-4A83-402A-97C7-204D7F1A1750}"
 	RootNamespace="server"
 	Keyword="Win32Proj"
-	AssemblyReferenceSearchPaths="&quot;..\reactor&quot;"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -61,7 +60,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libreactor.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -165,12 +163,12 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{2044CF0C-66B3-4B21-BF9E-93AA2A77C92F}"
-			RelativePathToProject=".\reactor.vcproj"
-		/>
 	</References>
 	<Files>
+		<File
+			RelativePath="..\reactor_server_test.cc"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
