@@ -31,7 +31,7 @@ enum
 #if defined(_WIN32)
     typedef ::SOCKET handle_t;
 #elif defined(__linux__)
-    typedef int32_t handle_t;
+    typedef int handle_t;
 #else
 #error "目前还不支持该平台"
 #endif // _WIN32
