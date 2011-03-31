@@ -5,7 +5,7 @@
 /// @file   reactor.cc
 /// @brief  Reactor¿‡ µœ÷
 /// @author zeshengwu<wuzesheng@vip.qq.com>
-/// @date   2011-03-27
+/// @date   2011-03-20
 
 namespace reactor
 {
