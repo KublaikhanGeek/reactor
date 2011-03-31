@@ -155,7 +155,7 @@ int EpollDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
     {
         for (int idx = 0; idx < num; ++idx)
         {
-            event_t evt;
+            event_t evt = 0;
             if ((ep_evts[idx].events & EPOLLERR) ||
                     (ep_evts[idx].events & EPOLLHUP))
             {
