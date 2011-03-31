@@ -194,13 +194,13 @@ int main(int argc, char ** argv)
     }
 
 #ifdef _WIN32
-        WSADATA wsa_data;
-        if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
-        {
-            fprintf(stderr, "WSAStartup() error:%s\n",
-                strerror(WSAGetLastError()));
-            return false;
-        }
+    WSADATA wsa_data;
+    if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
+    {
+        fprintf(stderr, "WSAStartup() error:%s\n",
+            strerror(WSAGetLastError()));
+        return false;
+    }
 #endif
 
     TimeServer server(argv[1], atoi(argv[2]));
