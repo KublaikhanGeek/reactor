@@ -96,6 +96,12 @@ public:
 
 private:
 
+    /// 禁止copy
+    Reactor(const Reactor &);
+    Reactor & operator=(const Reactor &);
+
+private:
+
     ReactorImplementation * m_reactor_impl; ///< reactor的实现类
 };
 } // namespace reactor
