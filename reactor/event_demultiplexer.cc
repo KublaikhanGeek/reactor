@@ -4,7 +4,7 @@
 #include "event_demultiplexer.h"
 
 /// @file   event_demultiplexer.cc
-/// @brief  事件多路发分发器类实现
+/// @brief  事件多路分发器类实现
 /// @author zeshengwu<wuzesheng@vip.qq.com>
 /// @date   2011-03-20
 

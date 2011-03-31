@@ -6,7 +6,7 @@
 #include "reactor.h"
 
 /// @file   event_demultiplexer.h
-/// @brief  事件多路发分发器类
+/// @brief  事件多路分发器类
 /// @author zeshengwu<wuzesheng@vip.qq.com>
 /// @date   2011-03-20
 
