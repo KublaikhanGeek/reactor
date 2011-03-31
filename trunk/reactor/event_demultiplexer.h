@@ -8,7 +8,7 @@
 /// @file   event_demultiplexer.h
 /// @brief  事件多路发分发器类
 /// @author zeshengwu<wuzesheng@vip.qq.com>
-/// @date   2011-03-27
+/// @date   2011-03-20
 
 namespace reactor
 {
@@ -16,8 +16,8 @@ class EventDemultiplexer
 {
 public:
 
-	/// 析构函数
-	virtual ~EventDemultiplexer() {}
+    /// 析构函数
+    virtual ~EventDemultiplexer() {}
 
     /// 获取有事件发生的所有句柄以及所发生的事件
     /// @param  events  获取的事件
@@ -89,11 +89,11 @@ class EpollDemultiplexer : public EventDemultiplexer
 {
 public:
 
-	/// 构造函数
-	EpollDemultiplexer();
+    /// 构造函数
+    EpollDemultiplexer();
 
-	/// 析构函数
-	~EpollDemultiplexer();
+    /// 析构函数
+    ~EpollDemultiplexer();
 
     /// 获取有事件发生的所有句柄以及所发生的事件
     /// @param  events  获取的事件
@@ -116,8 +116,8 @@ public:
 
 private:
 
-	int  m_epoll_fd; ///< epoll自身的fd
-	int  m_fd_num;   ///< 所有fd的个数
+    int  m_epoll_fd; ///< epoll自身的fd
+    int  m_fd_num;   ///< 所有fd的个数
 };
 } // namespace reactor
 

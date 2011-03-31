@@ -13,7 +13,7 @@
 /// @file   reactor.h
 /// @brief  Reactor类,用户通过此类提供的接口使用Reactor的功能
 /// @author zeshengwu<wuzesheng@vip.qq.com>
-/// @date   2011-03-27
+/// @date   2011-03-20
 
 namespace reactor
 {
