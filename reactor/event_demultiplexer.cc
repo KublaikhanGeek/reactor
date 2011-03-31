@@ -39,6 +39,8 @@ int SelectDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
         if (FD_ISSET(*it, &m_except_set))
         {
             evt |= kErrorEvent;
+            FD_CLR(*it, &m_read_set);
+            FD_CLR(*it, &m_write_set);
         }
         else
         {
@@ -53,6 +55,7 @@ int SelectDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
                 FD_CLR(*it, &m_write_set);
             }
         }
+        FD_CLR(*it, &m_except_set);
         if (evt & kEventMask)
         {
             events->insert(std::make_pair(*it, evt));
