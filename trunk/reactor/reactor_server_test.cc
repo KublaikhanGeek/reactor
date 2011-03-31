@@ -197,8 +197,7 @@ int main(int argc, char ** argv)
     WSADATA wsa_data;
     if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
     {
-        fprintf(stderr, "WSAStartup() error:%s\n",
-            strerror(WSAGetLastError()));
+        fprintf(stderr, "WSAStartup() error: %d\n", WSAGetLastError());
         return false;
     }
 #endif
