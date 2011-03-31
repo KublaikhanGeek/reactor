@@ -99,18 +99,9 @@ int SelectDemultiplexer::RequestEvent(handle_t handle, event_t evt)
 int SelectDemultiplexer::UnrequestEvent(handle_t handle)
 {
     m_fd_set.erase(handle);
-    if (evt & kReadEvent)
-    {
-        FD_CLR(handle, &m_read_set);
-    }
-    if (evt & kWriteEvent)
-    {
-        FD_CLR(handle, &m_write_set);
-    }
-    if (evt & kErrorEvent)
-    {
-        FD_CLR(handle, &m_except_set);
-    }
+    FD_CLR(handle, &m_read_set);
+    FD_CLR(handle, &m_write_set);
+    FD_CLR(handle, &m_except_set);
     return 0;
 }
 
