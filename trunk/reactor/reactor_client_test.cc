@@ -35,15 +35,6 @@ public:
     TimeClient() :
         EventHandler()
     {
-#ifdef _WIN32
-        WSADATA wsa_data;
-        if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
-        {
-            fprintf(stderr, "WSAStartup() error:%s\n",
-                strerror(WSAGetLastError()));
-            assert(0);
-        }
-#endif
         m_handle = socket(AF_INET, SOCK_STREAM, 0);
         assert(IsValidHandle(m_handle));
     }
@@ -128,6 +119,16 @@ int main(int argc, char ** argv)
         fprintf(stderr, "usage: %s ip port\n", argv[0]);
         return EXIT_FAILURE;
     }
+
+#ifdef _WIN32
+        WSADATA wsa_data;
+        if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
+        {
+            fprintf(stderr, "WSAStartup() error:%s\n",
+                strerror(WSAGetLastError()));
+            assert(0);
+        }
+#endif
 
     TimeClient client;
     if (!client.ConnectServer(argv[1], atoi(argv[2])))
