@@ -166,7 +166,11 @@ public:
     virtual void HandleRead()
     {
         struct sockaddr addr;
+#if defined(_WIN32)
         int addrlen = sizeof(addr);
+#elif defined(__linux__)
+        socklen_t addrlen = sizeof(addr);
+#endif
         reactor::handle_t handle = accept(m_handle, &addr, &addrlen);
         if (!IsValidHandle(handle))
         {
