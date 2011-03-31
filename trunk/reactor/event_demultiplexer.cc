@@ -30,7 +30,8 @@ int SelectDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
     /// 用select获取发生事件的fd集合
     m_timeout.tv_sec = timeout / 1000;
     m_timeout.tv_usec = timeout % 1000 * 1000;
-    int ret = select(FD_SETSIZE, &m_read_set, &m_write_set,
+    int max_fd = *m_fd_set.rbegin();
+    int ret = select(max_fd + 1, &m_read_set, &m_write_set,
                      &m_except_set, &m_timeout);
     if (ret <= 0)
     {
@@ -92,16 +93,12 @@ int SelectDemultiplexer::RequestEvent(handle_t handle, event_t evt)
     return 0;
 }
 
-/// 撤销句柄handle对事件evt的关注
+/// 撤销句柄handle对事件的关注
 /// @retval = 0 撤销成功
 /// @retval < 0 撤销出错
-int SelectDemultiplexer::UnrequestEvent(handle_t handle, event_t evt)
+int SelectDemultiplexer::UnrequestEvent(handle_t handle)
 {
-    if ((evt ^ kEventMask) == 0)
-    {
-        m_fd_set.erase(handle);
-    }
-
+    m_fd_set.erase(handle);
     if (evt & kReadEvent)
     {
         FD_CLR(handle, &m_read_set);
@@ -211,23 +208,18 @@ int EpollDemultiplexer::RequestEvent(handle_t handle, event_t evt)
     return 0;
 }
 
-/// 撤销句柄handle对事件evt的关注
+/// 撤销句柄handle对事件的关注
 /// @retval = 0 撤销成功
 /// @retval < 0 撤销出错
-int EpollDemultiplexer::UnrequestEvent(handle_t handle, event_t evt)
+int EpollDemultiplexer::UnrequestEvent(handle_t handle)
 {
-    if ((evt ^ kEventMask) == 0)
+    epoll_event ep_evt;
+    if (epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, handle, &ep_evt) != 0)
     {
-        epoll_event ep_evt;
-        if (epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, handle, &ep_evt) != 0)
-        {
-            return -errno;
-        }
-        --m_fd_num;
-        return 0;
+        return -errno;
     }
-    assert(0);
-    return -0xffff; /// fatal error
+    --m_fd_num;
+    return 0;
 }
 #else
 #error "目前还不支持该平台"
