@@ -127,7 +127,7 @@ int ReactorImplementation::RemoveHandler(EventHandler * handler)
 {
     handle_t handle = handler->GetHandle();
     m_handlers.erase(handle);
-    return m_demultiplexer->UnrequestEvent(handle, kEventMask);
+    return m_demultiplexer->UnrequestEvent(handle);
 }
 
 /// 处理事件,回调注册的handler中相应的事件处理函数

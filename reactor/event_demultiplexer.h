@@ -33,10 +33,10 @@ public:
     /// @retval < 0 设置出错
     virtual int RequestEvent(handle_t handle, event_t evt) = 0;
 
-    /// 撤销句柄handle对事件evt的关注
+    /// 撤销句柄handle对事件的关注
     /// @retval = 0 撤销成功
     /// @retval < 0 撤销出错
-    virtual int UnrequestEvent(handle_t handle, event_t evt) = 0;
+    virtual int UnrequestEvent(handle_t handle) = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -63,10 +63,10 @@ public:
     /// @retval < 0 设置出错
     virtual int RequestEvent(handle_t handle, event_t evt);
 
-    /// 撤销句柄handle对事件evt的关注
+    /// 撤销句柄handle对事件的关注
     /// @retval = 0 撤销成功
     /// @retval < 0 撤销出错
-    virtual int UnrequestEvent(handle_t handle, event_t evt);
+    virtual int UnrequestEvent(handle_t handle);
 
 private:
 
@@ -109,10 +109,10 @@ public:
     /// @retval < 0 设置出错
     virtual int RequestEvent(handle_t handle, event_t evt);
 
-    /// 撤销句柄handle对事件evt的关注
+    /// 撤销句柄handle对事件的关注
     /// @retval = 0 撤销成功
     /// @retval < 0 撤销出错
-    virtual int UnrequestEvent(handle_t handle, event_t evt);
+    virtual int UnrequestEvent(handle_t handle);
 
 private:
 
