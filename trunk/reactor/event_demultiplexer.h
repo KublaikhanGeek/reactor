@@ -79,7 +79,6 @@ private:
     fd_set              m_write_set;  ///< 写事件fd集合
     fd_set              m_except_set; ///< 异常事件fd集合
     timeval             m_timeout;    ///< 超时
-    std::set<handle_t>  m_fd_set;     ///< 所有的fd集合
 };
 
 ///////////////////////////////////////////////////////////////////////////////
