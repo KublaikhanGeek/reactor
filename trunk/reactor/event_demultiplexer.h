@@ -19,13 +19,13 @@ public:
     /// 析构函数
     virtual ~EventDemultiplexer() {}
 
-    /// 获取有事件发生的所有句柄以及所发生的事件
-    /// @param  events  获取的事件
-    /// @param  timeout 超时时间
-    /// @retval = 0     没有发生事件的句柄(超时)
-    /// @retval > 0     发生事件的句柄个数
-    /// @retval < 0     发生错误
-    virtual int WaitEvents(std::map<handle_t, event_t> * events,
+    /// 获取并处理有事件发生的所有句柄上的事件
+    /// @param  handlers 事件处理器集合
+    /// @param  timeout  超时时间
+    /// @retval = 0      没有发生事件的句柄(超时)
+    /// @retval > 0      发生事件的句柄个数
+    /// @retval < 0      发生错误
+    virtual int WaitEvents(std::map<handle_t, EventHandler *> * handlers,
                            int timeout = 0) = 0;
 
     /// 设置句柄handle关注evt事件
@@ -49,13 +49,13 @@ public:
     /// 构造函数
     SelectDemultiplexer();
 
-    /// 获取有事件发生的所有句柄以及所发生的事件
-    /// @param  events  获取的事件
-    /// @param  timeout 超时时间
-    /// @retval = 0     没有发生事件的句柄(超时)
-    /// @retval > 0     发生事件的句柄个数
-    /// @retval < 0     发生错误
-    virtual int WaitEvents(std::map<handle_t, event_t> * events,
+    /// 获取并处理有事件发生的所有句柄上的事件
+    /// @param  handlers 事件处理器集合
+    /// @param  timeout  超时时间
+    /// @retval = 0      没有发生事件的句柄(超时)
+    /// @retval > 0      发生事件的句柄个数
+    /// @retval < 0      发生错误
+    virtual int WaitEvents(std::map<handle_t, EventHandler *> * handlers,
                            int timeout = 0);
 
     /// 设置句柄handle关注evt事件
@@ -95,13 +95,13 @@ public:
     /// 析构函数
     ~EpollDemultiplexer();
 
-    /// 获取有事件发生的所有句柄以及所发生的事件
-    /// @param  events  获取的事件
-    /// @param  timeout 超时时间
-    /// @retval = 0     没有发生事件的句柄(超时)
-    /// @retval > 0     发生事件的句柄个数
-    /// @retval < 0     发生错误
-    virtual int WaitEvents(std::map<handle_t, event_t> * events,
+    /// 获取并处理有事件发生的所有句柄上的事件
+    /// @param  handlers 事件处理器集合
+    /// @param  timeout  超时时间
+    /// @retval = 0      没有发生事件的句柄(超时)
+    /// @retval > 0      发生事件的句柄个数
+    /// @retval < 0      发生错误
+    virtual int WaitEvents(std::map<handle_t, EventHandler *> * handlers,
                            int timeout = 0);
 
     /// 设置句柄handle关注evt事件

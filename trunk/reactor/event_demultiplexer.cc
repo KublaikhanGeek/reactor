@@ -18,14 +18,15 @@ SelectDemultiplexer::SelectDemultiplexer()
     this->Clear();
 }
 
-/// 获取有事件发生的所有句柄以及所发生的事件
-/// @param  events  获取的事件
-/// @param  timeout 超时时间
-/// @retval = 0     没有发生事件的句柄(超时)
-/// @retval > 0     发生事件的句柄个数
-/// @retval < 0     发生错误
-int SelectDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
-                                    int timeout)
+/// 获取并处理有事件发生的所有句柄上的事件
+/// @param  handlers 事件处理器集合
+/// @param  timeout  超时时间
+/// @retval = 0      没有发生事件的句柄(超时)
+/// @retval > 0      发生事件的句柄个数
+/// @retval < 0      发生错误
+int SelectDemultiplexer::WaitEvents(
+        std::map<handle_t, EventHandler *> * handlers,
+        int timeout)
 {
     /// 用select获取发生事件的fd集合
     m_timeout.tv_sec = timeout / 1000;
@@ -41,10 +42,10 @@ int SelectDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
     std::set<handle_t>::iterator it = m_fd_set.begin();
     while (it != m_fd_set.end())
     {
-        event_t evt = 0;
+        assert(handlers->find(*it) != handlers->end());
         if (FD_ISSET(*it, &m_except_set))
         {
-            evt |= kErrorEvent;
+            (*handlers)[*it]->HandleError();
             FD_CLR(*it, &m_read_set);
             FD_CLR(*it, &m_write_set);
         }
@@ -52,20 +53,16 @@ int SelectDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
         {
             if (FD_ISSET(*it, &m_read_set))
             {
-                evt |= kReadEvent;
+                (*handlers)[*it]->HandleRead();
                 FD_CLR(*it, &m_read_set);
             }
             if (FD_ISSET(*it, &m_write_set))
             {
-                evt |= kWriteEvent;
+                (*handlers)[*it]->HandleWrite();
                 FD_CLR(*it, &m_write_set);
             }
         }
         FD_CLR(*it, &m_except_set);
-        if (evt & kEventMask)
-        {
-            events->insert(std::make_pair(*it, evt));
-        }
         ++it;
     }
     return ret;
@@ -128,14 +125,15 @@ EpollDemultiplexer::~EpollDemultiplexer()
     ::close(m_epoll_fd);
 }
 
-/// 获取有事件发生的所有句柄以及所发生的事件
-/// @param  events  获取的事件
-/// @param  timeout 超时时间
-/// @retval = 0     没有发生事件的句柄(超时)
-/// @retval > 0     发生事件的句柄个数
-/// @retval < 0     发生错误
-int EpollDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
-                                   int timeout)
+/// 获取并处理有事件发生的所有句柄上的事件
+/// @param  handlers 事件处理器集合
+/// @param  timeout  超时时间
+/// @retval = 0      没有发生事件的句柄(超时)
+/// @retval > 0      发生事件的句柄个数
+/// @retval < 0      发生错误
+int EpollDemultiplexer::WaitEvents(
+        std::map<handle_t, EventHandler *> * handlers,
+        int timeout)
 {
     std::vector<epoll_event> ep_evts(m_fd_num);
     int num = epoll_wait(m_epoll_fd, &ep_evts[0], ep_evts.size(), timeout);
@@ -143,24 +141,24 @@ int EpollDemultiplexer::WaitEvents(std::map<handle_t, event_t> * events,
     {
         for (int idx = 0; idx < num; ++idx)
         {
-            event_t evt = 0;
+            handle_t handle = ep_evts[idx].data.fd;
+            assert(handlers->find(handle) != handlers->end());
             if ((ep_evts[idx].events & EPOLLERR) ||
                     (ep_evts[idx].events & EPOLLHUP))
             {
-                evt |= kErrorEvent;
+                (*handlers)[handle]->HandleError();
             }
             else
             {
                 if (ep_evts[idx].events & EPOLLIN)
                 {
-                    evt |= kReadEvent;
+                    (*handlers)[handle]->HandleRead();
                 }
                 if (ep_evts[idx].events & EPOLLOUT)
                 {
-                    evt |= kWriteEvent;
+                    (*handlers)[handle]->HandleWrite();
                 }
             }
-            events->insert(std::make_pair(ep_evts[idx].data.fd, evt));
         }
     }
     return num;
