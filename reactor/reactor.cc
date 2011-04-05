@@ -134,34 +134,6 @@ int ReactorImplementation::RemoveHandler(EventHandler * handler)
 /// @param  timeout 超时时间
 void ReactorImplementation::HandleEvents(int timeout)
 {
-    std::map<handle_t, event_t> events;
-    /// 获取事件
-    int events_num = m_demultiplexer->WaitEvents(&events);
-    if (events_num > 0)
-    {
-        /// 处理事件
-        std::map<handle_t, event_t>::iterator it = events.begin();
-        while (it != events.end())
-        {
-            assert(m_handlers.find(it->first) != m_handlers.end());
-            EventHandler * handler = m_handlers[it->first];
-            if (it->second & kErrorEvent) ///< 出错
-            {
-                handler->HandleError();
-            }
-            else ///< 可读 || 可写
-            {
-                if (it->second & kReadEvent)
-                {
-                    handler->HandleRead();
-                }
-                if (it->second & kWriteEvent)
-                {
-                    handler->HandleWrite();
-                }
-            }
-            ++it;
-        }
-    }
+    m_demultiplexer->WaitEvents(&m_handlers);
 }
 } // namespace reactor
