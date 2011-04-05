@@ -31,7 +31,7 @@ int SelectDemultiplexer::WaitEvents(
     /// 用select获取发生事件的fd集合
     m_timeout.tv_sec = timeout / 1000;
     m_timeout.tv_usec = timeout % 1000 * 1000;
-    int max_fd = handlers.rbegin()->first;
+    int max_fd = handlers->rbegin()->first;
     int ret = select(max_fd + 1, &m_read_set, &m_write_set,
                      &m_except_set, &m_timeout);
     if (ret <= 0)
@@ -39,30 +39,29 @@ int SelectDemultiplexer::WaitEvents(
         return ret;
     }
     ///转化select的结果
-    std::map<handle_t, EventHandler *>::iterator it = handlers.begin();
-    while (it != handlers.end())
+    std::map<handle_t, EventHandler *>::iterator it = handlers->begin();
+    while (it != handlers->end())
     {
-        assert(handlers->find(*it) != handlers->end());
-        if (FD_ISSET(*it, &m_except_set))
+        if (FD_ISSET(it->first, &m_except_set))
         {
-            (*handlers)[*it]->HandleError();
-            FD_CLR(*it, &m_read_set);
-            FD_CLR(*it, &m_write_set);
+            it->second->HandleError();
+            FD_CLR(it->first, &m_read_set);
+            FD_CLR(it->first, &m_write_set);
         }
         else
         {
-            if (FD_ISSET(*it, &m_read_set))
+            if (FD_ISSET(it->first, &m_read_set))
             {
-                (*handlers)[*it]->HandleRead();
-                FD_CLR(*it, &m_read_set);
+                it->second->HandleRead();
+                FD_CLR(it->first, &m_read_set);
             }
-            if (FD_ISSET(*it, &m_write_set))
+            if (FD_ISSET(it->first, &m_write_set))
             {
-                (*handlers)[*it]->HandleWrite();
-                FD_CLR(*it, &m_write_set);
+                it->second->HandleWrite();
+                FD_CLR(it->first, &m_write_set);
             }
         }
-        FD_CLR(*it, &m_except_set);
+        FD_CLR(it->first, &m_except_set);
         ++it;
     }
     return ret;
