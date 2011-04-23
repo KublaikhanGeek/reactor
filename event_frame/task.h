@@ -20,7 +20,7 @@ public:
     Task() {}
 
     /// 析构函数
-	virtual ~Task() {}
+    virtual ~Task() {}
 
     /// 处理启动事件
     /// @param  event 启动任务事件
