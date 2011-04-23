@@ -8,9 +8,6 @@
 /// @author zeshengwu<wuzesheng@vip.qq.com>
 /// @date   2011-04-25
 
-typedef __int64 uint64_t;
-typedef __int64 int64_t;
-
 namespace event_frame
 {
 /// ÈÎÎñÀà
