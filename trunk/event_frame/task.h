@@ -15,7 +15,7 @@ class Event;
 class Task
 {
 public:
-    
+
     /// ¹¹Ôìº¯Êı
     Task() {}
 

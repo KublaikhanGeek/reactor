@@ -16,7 +16,7 @@ class Task;
 /// 事件基类
 class Event
 {
-public:    
+public:
 
     /// 构造函数
     Event(Task * task) :
@@ -32,24 +32,24 @@ public:
     {
         return m_dispatch_id;
     }
-    
+
     /// 设置事件分发id
     void SetDispatchID(uint64_t id)
     {
         m_dispatch_id = id;
     }
-    
+
     /// 获取与该事件相关联的task
     Task * GetTask()
     {
         return m_task;
     }
-    
+
     /// 处理事件
     virtual int Apply() = 0;
-    
+
 protected:
-    
+
     Task *    m_task;         ///< 与此event相关联的task
     uint64_t  m_dispatch_id;  ///< 通过此id将事件分到不同的workthread
 };
