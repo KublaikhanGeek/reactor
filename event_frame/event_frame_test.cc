@@ -115,7 +115,6 @@ int main()
     event_frame::Event * evt_b = new UserDefinedBEvent<UserDefinedTask>(task);
     evt_a->Apply();
     evt_b->Apply();
-    evt_b->Apply();
     delete evt_b;
     delete evt_a;
     delete task;
