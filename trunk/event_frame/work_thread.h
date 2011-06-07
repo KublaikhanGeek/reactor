@@ -87,9 +87,10 @@ private:
         }
         else if (ret < 0)
         {
-            /// 任务结束，销毁相关资源
-            Task * task = event->GetTask();
-            delete task;
+            /// TODO
+            /// /// 任务结束，销毁相关资源
+            /// Task * task = event->GetTask();
+            /// delete task;
         }
         else
         {
