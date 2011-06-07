@@ -52,7 +52,7 @@ public:
     /// @param  event 启动任务事件
     /// @retval =0    等待下次事件触发 
     /// @retval >0    等待超时触发
-    /// @retval <0    任务结束
+    /// @retval <0    发生错误
     virtual int ProcessStartEvent(event_frame::Event * event)
     {
         event_frame::StartEvent<UserDefinedTask> * evt =
@@ -66,11 +66,25 @@ public:
     /// @param  event 超时事件
     /// @retval =0    等待下次事件触发 
     /// @retval >0    等待超时触发
-    /// @retval <0    任务结束
+    /// @retval <0    发生错误
     virtual int ProcessTimeoutEvent(event_frame::Event * event)
     {
         event_frame::TimeoutEvent<UserDefinedTask> * evt =
             dynamic_cast<event_frame::TimeoutEvent<UserDefinedTask> *>(event);
+        assert(evt != NULL);
+        /// TODO 处理超时事件
+        return 0;
+    }
+
+    /// 处理任务完成事件
+    /// @param  event 任务完成事件
+    /// @retval =0    等待下次事件触发 
+    /// @retval >0    等待超时触发
+    /// @retval <0    发生错误
+    virtual int ProcessFinishEvent(event_frame::Event * event)
+    {
+        event_frame::FinishEvent<UserDefinedTask> * evt =
+            dynamic_cast<event_frame::FinishEvent<UserDefinedTask> *>(event);
         assert(evt != NULL);
         /// TODO 处理超时事件
         return 0;
@@ -87,7 +101,7 @@ public:
     /// @param  event 要处理的事件
     /// @retval =0    等待下次事件触发 
     /// @retval >0    等待超时触发
-    /// @retval <0    任务结束
+    /// @retval <0    发生错误
     int ProcessUserDefinedAEvent(UserDefinedAEvent<UserDefinedTask> * event)
     {
         /// TODO 处理用户自定义事件
@@ -99,7 +113,7 @@ public:
     /// @param  event 要处理的事件
     /// @retval =0    等待下次事件触发 
     /// @retval >0    等待超时触发
-    /// @retval <0    任务结束
+    /// @retval <0    发生错误
     int ProcessUserDefinedBEvent(UserDefinedBEvent<UserDefinedTask> * event)
     {
         /// TODO 处理用户自定义事件

@@ -93,6 +93,26 @@ public:
         return task->ProcessTimeoutEvent(this);
     }
 };
+
+/// 任务完成事件
+template<typename T>
+class FinishEvent: public Event
+{
+public:
+
+    /// 构造函数
+    FinishEvent(Task * task) :
+        Event(task)
+    {}
+
+    /// 处理超时事件
+    virtual int Apply()
+    {
+        T * task = dynamic_cast<T *>(m_task);
+        assert(task != NULL);
+        return task->ProcessFinishEvent(this);
+    }
+};
 } // namespace event_frame
 
 #endif // EVENT_FRAME_EVENT_H_

@@ -26,15 +26,22 @@ public:
     /// @param  event 启动任务事件
     /// @retval =0    等待下次事件触发 
     /// @retval >0    等待超时触发
-    /// @retval <0    任务结束
+    /// @retval <0    发生错误
     virtual int ProcessStartEvent(Event * event) = 0;
 
     /// 处理超时事件
     /// @param  event 超时事件
     /// @retval =0    等待下次事件触发 
     /// @retval >0    等待超时触发
-    /// @retval <0    任务结束
+    /// @retval <0    发生错误
     virtual int ProcessTimeoutEvent(Event * event) = 0;
+
+    /// 处理任务完成事件
+    /// @param  event 任务完成事件
+    /// @retval =0    等待下次事件触发 
+    /// @retval >0    等待超时触发
+    /// @retval <0    发生错误
+    virtual int ProcessFinishEvent(Event * event) = 0;
 
     /// 创建一个超时事件
     /// @return 创建的超时事件的指针
