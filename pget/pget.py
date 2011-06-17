@@ -38,6 +38,40 @@ class PGetOptionParser(object):
         self.parser.add_option_group(group)
 
         #group logging and input file
+        group = optparse.OptionGroup(self.parser, 'Logging and input file')
+        group.add_option('-o', '--output-file', action='store', metavar='FILE',
+                dest='output_file', help='log messages to FILE.')
+        group.add_option('-a', '--append-output', action='store',
+                metavar='FILE', dest='append_output_file',
+                help='append messages to FILE.')
+        group.add_option('-d', '--debug', action='store_true', dest='debug',
+                help='print lots of debugging information.')
+        group.add_option('-q', '--quiet', action='store_true', dest='quiet',
+                help='quiet (no output).')
+        group.add_option('-v', '--verbose', action='store_true',
+                dest='verbose', default=True,
+                help='be verbose (this is the default).')
+        group.add_option('', '--no-verbose', action='store_true',
+                dest='no_verbose',
+                help='turn off verboseness, without being quiet.')
+        group.add_option('-i', '--input-file', action='store', metavar='FILE',
+                dest='input_file', help='download URLs found in FILE.')
+        group.add_option('-F', '--force-html', action='store_true',
+                dest='force_html', help='treat input file as HTML.')
+        group.add_option('-B', '--base', action='store', metavar='URL',
+                dest='base',
+                help='prepends URL to relative links in -F -i file.')
+        self.parser.add_option_group(group)
+
+        #group download
+        group = optparse.OptionGroup(self.parser, 'Download')
+        group.add_option('-t', '--tries', action='store', type='int',
+                metavar='NUMBER', dest='tries',
+                help='set number of retries to NUMBER (0 unlimits).')
+        self.parser.add_option_group(group)
+        #self.parser.add_option_group(group)
+        #self.parser.add_option_group(group)
+        #self.parser.add_option_group(group)
 
     def parse_args(self, args):
         (self.values, self.args) = self.parser.parse_args(args)
